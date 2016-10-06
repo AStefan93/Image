@@ -1,6 +1,10 @@
 
 #include "Image.h"
 
+const uint16_t c_uint16_endian_test = 1; //used by is_bigendian() macro
+
+uint32_t ImageProc::Image::Image_count;
+
 ImageProc::Image::Image() {
 
 	this->grayLevel = 0;
@@ -10,34 +14,258 @@ ImageProc::Image::Image() {
 	for(int i = 0; i < 256; i++)
 		this->Hist[i] = 0; //initialize vector with zeroes;
 
+	this->Image_count += 1;
+
 }
 
 ImageProc::Image::Image(char* fileName) {
 
-	unsigned char c;
 	FILE *fp;
-	fopen_s(&fp, fileName, "r");
+	fopen_s(&fp, fileName, "rb");
 
-	this->readPGMHeader(fp);
+	uint16_t img_marker = 0;
+	uint32_t cursor_position = 0;
 
-	this->Hist = new double[256]; //allocate memory for histogram vector
-	for(int i = 0; i < 256; i++)
-		this->Hist[i] = 0; //initialize vector with zeroes;
+	const uint8_t image_buffer_length = 1; //bytes
+	uint8_t* image_buffer = new uint8_t[image_buffer_length];
 
-	//allocate memory
-	this->imageData = new unsigned int*[this->Height];
-	for (unsigned int i = 0; i < this->Height; i++)
-		this->imageData[i] = new unsigned int[this->Width];
+	if(NULL != fp){
 
-	for (unsigned int i = 0; i < this->Height; i++) {
-		for (unsigned int j = 0; j < this->Width; j++) {
-			fscanf_s(fp, "%c", &c);
-			this->imageData[i][j] = c;
-		}
-	}
+			while((image_buffer_length == fread(image_buffer, sizeof(image_buffer[0]), image_buffer_length, fp))){
 
-	fclose(fp);
+				img_marker = (img_marker << 8) + image_buffer[0];
 
+				switch(img_marker){
+
+					case SOI:
+						printf_s("SOI  = %x\n",img_marker);
+						cursor_position = ftell(fp);
+						printf_s("Position = %x\n",cursor_position);
+						break;
+
+					case SOF0:
+						printf_s("SOF0 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+
+					case SOF2:
+						printf_s("SOF2 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+
+					case DHT:
+						printf_s("DHT  = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+
+					case DQT:
+						printf_s("DQT  = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+
+					case DRI:
+						printf_s("DRI  = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case SOS:
+						printf_s("SOS  = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+											
+					case RST0:
+						printf_s("RST0 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case RST1:
+						printf_s("RST1 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case RST2:
+						printf_s("RST2 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case RST3:
+						printf_s("RST3 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+											
+					case RST4:
+						printf_s("RST4 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case RST5:
+						printf_s("RST5 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case RST6:
+						printf_s("RST6 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case RST7:
+						printf_s("RST7 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+											
+					case APP0:
+						printf_s("APP0 = %x\n",img_marker);
+						cursor_position = ftell(fp);
+						printf_s("Position = %x\n",cursor_position);
+
+						f_readAPP0(fp);
+
+						break;
+
+					case APP1:
+						printf_s("APP1 = %x\n",img_marker);
+						cursor_position = ftell(fp);
+						printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP2:
+						printf_s("APP2 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP3:
+						printf_s("APP3 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP4:
+						printf_s("APP4 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP5:
+						printf_s("APP5 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP6:
+						printf_s("APP6 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP7:
+						printf_s("APP7 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP8:
+						printf_s("APP8 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP9:
+						printf_s("APP9 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP10:
+						printf_s("APP10 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP11:
+						printf_s("APP11 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP12:
+						printf_s("APP12 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP13:
+						printf_s("APP13 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP14:
+						printf_s("APP14 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+					
+					case APP15:
+						printf_s("APP15 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+
+					
+					case COM:
+						printf_s("COM  = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf_s("Position = %x\n",cursor_position);
+						break;
+
+					case EOI:
+						printf_s("EOI  = %x\n",img_marker);
+						cursor_position = ftell(fp);
+						printf_s("Position = %x\n",cursor_position);
+						break;
+
+					default:
+						break;
+				}//end switch
+
+			}//end While
+		
+		//allocate memory
+	//this->imageData = new unsigned int*[this->Height];
+	//for (unsigned int i = 0; i < this->Height; i++)
+	//	this->imageData[i] = new unsigned int[this->Width];
+
+		//for (unsigned int i = 0; i < this->Height; i++) {
+	//	for (unsigned int j = 0; j < this->Width; j++) {
+	//		fscanf_s(fp, "%c", &c);
+	//		this->imageData[i][j] = c;
+	//	}
+	//}
+
+		fclose(fp);
+
+	}else{
+		std::cout << "Path or file not found " << "\"" << fileName << "\"" << std::endl;
+	}// end if(NULL != fp){
+
+
+//	delete[] image_type;
+	delete[] image_buffer;
 }
 
 ImageProc::Image::Image(unsigned int H,unsigned int W) {
@@ -62,112 +290,123 @@ ImageProc::Image::Image(unsigned int H,unsigned int W) {
 		}
 	}
 
-}
-
-
-void ImageProc::Image::readPGMHeader(FILE* fp){
-
-	char* type = new char[2];
-	this->imgType.clear();
-
-	if(fp != NULL){
-		fscanf_s(fp, "%c", &type[0]);
-		fscanf_s(fp, "%c", &type[1]);
-		this->imgType += type[0];
-		this->imgType += type[1];
-		fscanf_s(fp, "%d", &this->Width);
-		fscanf_s(fp, "%d", &this->Height);
-		fscanf_s(fp, "%d\n", &this->grayLevel);
-	}else{
-		std::cout << "File not open. Check path." << std::endl;
-		_getch();
-		exit(-1);
-	}
-
-	delete type;
-}
-
-int ImageProc::Image::readPGM(char* fileName) {
-
-	unsigned char c;
-	FILE* fp;
-	fopen_s(&fp, fileName, "r");
-
-	this->readPGMHeader(fp);
-
-	//allocate memory
-	this->imageData = new unsigned int*[this->Height];
-	for (unsigned int i = 0; i < this->Height; i++)
-		this->imageData[i] = new unsigned int[this->Width];
-
-	for (unsigned int i = 0; i < this->Height; i++) {
-		for (unsigned int j = 0; j < this->Width; j++) {
-			if(this->imgType[1] == '2') //P2 type
-				fscanf_s(fp, "%d", &this->imageData[i][j]);
-			else if(this->imgType[1] == '5'){ //else P5 type
-				fscanf_s(fp,"%c", &c); 
-				this->imageData[i][j] = c;
-			}else { std::cout << "PGM type not supported" << this->imgType << std::endl; }
-		}
-	}
-
-	fclose(fp);
-
-	return 0;
-}
-
-void ImageProc::Image::writePGMHeader(FILE* fp){
-
-	if(fp != NULL){
-		fprintf(fp, "%c", this->imgType[0]);
-		fprintf(fp, "%c\n", this->imgType[1]);
-		fprintf(fp, "%d ", this->Width);
-		fprintf(fp, "%d\n", this->Height);
-		fprintf(fp, "%d\n", this->grayLevel);
-	}else{
-		std::cout << "File failed to open" << std::endl;
-		_getch();
-		exit(-1);
-	}
+	this->Image_count += 1;
 
 }
 
 
-int ImageProc::Image::writePGM(char* fileName) {
+//void ImageProc::Image::readPGMHeader(FILE* fp){
+//
+//	char* type = new char[2];
+//	this->imgType.clear();
+//
+//	if(fp != NULL){
+//		fscanf_s(fp, "%c", &type[0]);
+//		fscanf_s(fp, "%c", &type[1]);
+//		this->imgType += type[0];
+//		this->imgType += type[1];
+//		fscanf_s(fp, "%d", &this->Width);
+//		fscanf_s(fp, "%d", &this->Height);
+//		fscanf_s(fp, "%d\n", &this->grayLevel);
+//	}else{
+//		std::cout << "File not open. Check path." << std::endl;
+//		_getch();
+//		exit(-1);
+//	}
+//
+//	delete type;
+//}
 
-	FILE *fp;
-	fopen_s(&fp, fileName, "w");
+//int ImageProc::Image::readPGM(char* fileName) {
+//
+//	unsigned char c;
+//	FILE* fp;
+//	fopen_s(&fp, fileName, "r");
+//
+//	this->readPGMHeader(fp);
+//
+//	//allocate memory
+//	this->imageData = new unsigned int*[this->Height];
+//	for (unsigned int i = 0; i < this->Height; i++)
+//		this->imageData[i] = new unsigned int[this->Width];
+//
+//	for (unsigned int i = 0; i < this->Height; i++) {
+//		for (unsigned int j = 0; j < this->Width; j++) {
+//			if(this->imgType[1] == '2') //P2 type
+//				fscanf_s(fp, "%d", &this->imageData[i][j]);
+//			else if(this->imgType[1] == '5'){ //else P5 type
+//				fscanf_s(fp,"%c", &c); 
+//				this->imageData[i][j] = c;
+//			}else { std::cout << "PGM type not supported" << this->imgType << std::endl; }
+//		}
+//	}
+//
+//	fclose(fp);
+//
+//	return 0;
+//}
 
-	this->writePGMHeader(fp);
+//void ImageProc::Image::writePGMHeader(FILE* fp){
+//
+//	if(fp != NULL){
+//		fprintf(fp, "%c", this->imgType[0]);
+//		fprintf(fp, "%c\n", this->imgType[1]);
+//		fprintf(fp, "%d ", this->Width);
+//		fprintf(fp, "%d\n", this->Height);
+//		fprintf(fp, "%d\n", this->grayLevel);
+//	}else{
+//		std::cout << "File failed to open" << std::endl;
+//		_getch();
+//		exit(-1);
+//	}
+//
+//}
 
-	for (unsigned int i = 0; i < this->Height; i++) {
-		for (unsigned int j = 0; j < this->Width; j++) {
-			fprintf(fp, "%.3d ", (unsigned char)this->imageData[i][j]);
-		}
-		fprintf(fp,"\n");
-	}
 
-	fclose(fp);
-
-	return 0;
-}
+//int ImageProc::Image::writePGM(char* fileName) {
+//
+//	FILE *fp;
+//	fopen_s(&fp, fileName, "w");
+//
+//	this->writePGMHeader(fp);
+//
+//	for (unsigned int i = 0; i < this->Height; i++) {
+//		for (unsigned int j = 0; j < this->Width; j++) {
+//			fprintf(fp, "%.3d ", (unsigned char)this->imageData[i][j]);
+//		}
+//		fprintf(fp,"\n");
+//	}
+//
+//	fclose(fp);
+//
+//	return 0;
+//}
 
 ImageProc::Image::~Image() {
 
-	for (unsigned int i = 0; i < this->Height; i++)
-		delete this->imageData[i];
-	delete this->imageData;
-	for (unsigned int i = 0; i < this->Height; i++)
-		delete this->Red[i];
-	delete this->Red;
-	for (unsigned int i = 0; i < this->Height; i++)
-		delete this->Green[i];
-	delete this->Green;
-	for (unsigned int i = 0; i < this->Height; i++)
-		delete this->Blue[i];
-	delete this->Blue;
+	if(this->Image_count > 0){
+		
+		for (unsigned int i = 0; i < this->Height; i++)
+			delete[] this->imageData[i];
+		delete[] this->imageData;
+		
+		for (unsigned int i = 0; i < this->Height; i++)
+			delete[] this->Red[i];
+		delete[] this->Red;
+	
+		for (unsigned int i = 0; i < this->Height; i++)
+			delete[] this->Green[i];
+		delete[] this->Green;
+		
+		for (unsigned int i = 0; i < this->Height; i++)
+			delete[] this->Blue[i];
+		delete[] this->Blue;
 
-	delete this->Hist;
+		delete[] this->Hist;
+		
+		this->Image_count -= 1;
+
+	}
 
 }
 
@@ -175,7 +414,7 @@ unsigned int ImageProc::Image::getHeight() {
 	return this->Height;
 }
 
-int ImageProc::Image::setHeight(int H) {
+unsigned int ImageProc::Image::setHeight(int H) {
 	
 	this->Height = H;
 
@@ -187,7 +426,7 @@ unsigned int ImageProc::Image::getWidth() {
 	return this->Width;
 }
 
-int ImageProc::Image::setWidth(int W) {
+unsigned int ImageProc::Image::setWidth(int W) {
 	
 	this->Width = W;
 
@@ -202,7 +441,7 @@ std::string ImageProc::Image::getType() {
 	return this->imgType;
 }
 
-int ImageProc::Image::setgrayLevel(int x){
+unsigned int ImageProc::Image::setgrayLevel(int x){
 
 	this->grayLevel = x;
 
@@ -336,42 +575,50 @@ int ImageProc::equalizeHistogramCumulative(Image* img){
 
 int ImageProc::rotate(Image* img, float theta){
 
-	int** tempImage;
-	unsigned int x;
-	unsigned int y;
+	unsigned int** tempImage;
+	unsigned int x_prime;
+	unsigned int y_prime;
+	int32_t x_c; //horizontal coordonate relative to selected center. IT CAN BE NEGATIVE
+	int32_t y_c; // vertical coordonate relative to selected center. IT CAN BE NEGATIVE
+
+	uint32_t H = img->getHeight();
+	uint32_t W = img->getWidth();
 
 	double rad = theta * ImageProc::pi / 180; //convert degrees to rad
 
-	tempImage = new int*[img->getHeight()];
-	for (unsigned int i = 0; i < img->getHeight(); i++)
-		tempImage[i] = new int[img->getWidth()];
-	for (unsigned int i = 0; i < img->getHeight(); i++)
-		for(unsigned int j = 0; j < img->getWidth(); j++)
+	tempImage = new unsigned int*[H];
+	for (unsigned int i = 0; i < H; i++)
+		tempImage[i] = new unsigned int[W];
+	for (unsigned int i = 0; i < H; i++)
+		for(unsigned int j = 0; j < W; j++)
 		tempImage[i][j] = 0; //initialise matrix with zeroes
 
-	for(unsigned int i = 0; i < img->getHeight(); i++){
-		for(unsigned int j = 0; j < img->getWidth(); j++){
+	for(unsigned int i = 0; i < H; i++){
+		for(unsigned int j = 0; j < W; j++){
 
-			x = (unsigned int)( std::cos(rad)*(i - (img->getHeight()-1)/2) - std::sin(rad)*(j - (img->getWidth()-1)/2)  + (img->getHeight()-1)/2 );
-			y = (unsigned int)( std::sin(rad)*(i - (img->getHeight()-1)/2) + std::cos(rad)*(j - (img->getWidth()-1)/2) + (img->getWidth()-1)/2);
+			x_c = (int32_t)i - (int32_t)(H)/2;
+			y_c = (int32_t)j - (int32_t)(W)/2;
 
-			if((x >= 0) && (x < img->getHeight()) && (y >= 0) && (y < img->getWidth()))
-				tempImage[x][y] = img->imageData[i][j]; 
+			x_prime = (unsigned int)( std::cos(rad)*(x_c) - std::sin(rad)*(y_c)  + (H)/2 );
+			y_prime = (unsigned int)( std::sin(rad)*(x_c) + std::cos(rad)*(y_c) + (W)/2);
+
+			if((x_prime >= 0) && (x_prime < H) && (y_prime >= 0) && (y_prime < W))
+				tempImage[x_prime][y_prime] = img->imageData[i][j]; 
 
 		}
 	}
 
-	for(unsigned int i = 0; i < img->getHeight(); i++){
-		for(unsigned int j = 0; j < img->getWidth(); j++){
+	for(unsigned int i = 0; i < H; i++){
+		for(unsigned int j = 0; j < W; j++){
 
 			img->imageData[i][j] = tempImage[i][j];
 
 		}
 	}
 
-	for (unsigned int i = 0; i < img->getHeight(); i++)
-		delete tempImage[i];
-	delete tempImage;
+	for (unsigned int i = 0; i < H; i++)
+		delete[] tempImage[i];
+	delete[] tempImage;
 
 	return 0;
 }
@@ -534,7 +781,7 @@ int ImageProc::average_filter(Image* img,int windowSize,int n ){
 				}
 			}
 
-			tempImage[H][W] = (unsigned int)avrFilterY;
+			tempImage[H][W] = (int)avrFilterY;
 			
 		}
 	}
@@ -621,7 +868,7 @@ int ImageProc::average_filter_color_sqrt(Image* img,int windowSize,int n,int cha
 				}
 			}
 
-			tempImage[H][W] = (int)std::sqrt(avrFilterX);
+			tempImage[H][W] = (unsigned int)std::sqrt(avrFilterX);
 			
 		}
 	}
@@ -663,7 +910,7 @@ int ImageProc::average_filter_color_sqrt(Image* img,int windowSize,int n,int cha
 				}
 			}
 
-			tempImage[H][W] = (int)std::sqrt(avrFilterY);
+			tempImage[H][W] = (unsigned int)std::sqrt(avrFilterY);
 			
 		}
 	}
@@ -756,7 +1003,7 @@ int ImageProc::average_filter_color_normal(Image* img,int windowSize,int n,int c
 				}
 			}
 
-			tempImage[H][W] = (int)avrFilterX;
+			tempImage[H][W] = (unsigned int)avrFilterX;
 			
 		}
 	}
@@ -798,7 +1045,7 @@ int ImageProc::average_filter_color_normal(Image* img,int windowSize,int n,int c
 				}
 			}
 
-			tempImage[H][W] = (int)avrFilterY;
+			tempImage[H][W] = (unsigned int)avrFilterY;
 			
 		}
 	}
@@ -882,7 +1129,7 @@ int ImageProc::gaussian_filter(Image* img,int sigma){
 				}
 			}
 
-			tempImage[H][W] = (int)gaussFilterX;
+			tempImage[H][W] = (unsigned int)gaussFilterX;
 			
 		}
 	}
@@ -911,7 +1158,7 @@ int ImageProc::gaussian_filter(Image* img,int sigma){
 				}
 			}
 
-			tempImage[H][W] = (int)gaussFilterY;
+			tempImage[H][W] = (unsigned int)gaussFilterY;
 			
 		}
 	}
@@ -945,8 +1192,8 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	}
 
 	int windowSize;
-	unsigned int Height = img->getHeight();
-	unsigned int Width = img->getWidth();
+	int Height = img->getHeight();
+	int Width = img->getWidth();
 	double pcoef = 2 * sigma * sigma;
 	double scoef = (std::sqrt(2*pi)*sigma);
 
@@ -959,14 +1206,14 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	unsigned int** ImageCopy;
 
 	tempImage = new unsigned int*[Height];
-	for (unsigned int H = 0; H < Height; H++)
+	for (int H = 0; H < Height; H++)
 		tempImage[H] = new unsigned int[Width];
 	ImageCopy = new unsigned int*[Height];
-	for (unsigned int H = 0; H < Height; H++)
+	for (int H = 0; H < Height; H++)
 		ImageCopy[H] = new unsigned int[Width];
 
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 			ImageCopy[H][W] = img->imageData[H][W]; // copy image
 		}
 	}
@@ -989,8 +1236,8 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	}
 
 	//compute temporary image for Y axis
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 
 			gaussFilterY = 0;
 			coefsum = 0;
@@ -1012,8 +1259,8 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	}
 
 	//copy image
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 
 			ImageCopy[H][W] = tempImage[H][W];
 
@@ -1021,8 +1268,8 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	}
 
 	//compute temporary image for X axis
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 
 			gaussFilterX = 0;
 			coefsum = 0;
@@ -1044,8 +1291,8 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	}
 
 	//copy image
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 
 			img->imageData[H][W] = tempImage[H][W];
 
@@ -1053,7 +1300,7 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	}
 
 
-	for (unsigned int H = 0; H < Height; H++)
+	for (int H = 0; H < Height; H++)
 		delete tempImage[H];
 	delete tempImage;
 
@@ -1075,8 +1322,8 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	}
 
 	int windowSize;
-	unsigned int Height = img->getHeight();
-	unsigned int Width = img->getWidth();
+	int Height = img->getHeight();
+	int Width = img->getWidth();
 	double pcoef = 2 * sigma * sigma;
 	double scoef = (std::sqrt(2*pi)*sigma);
 
@@ -1089,14 +1336,14 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	double** ImageCopy;
 
 	tempImage = new double*[Height];
-	for (unsigned int H = 0; H < Height; H++)
+	for (int H = 0; H < Height; H++)
 		tempImage[H] = new double[Width];
 	ImageCopy = new double*[Height];
-	for (unsigned int H = 0; H < Height; H++)
+	for (int H = 0; H < Height; H++)
 		ImageCopy[H] = new double[Width];
 
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 			switch(channel){
 				case 0: ImageCopy[H][W] = img->Red[H][W]; // copy image
 				break;
@@ -1126,8 +1373,8 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	}
 
 	//compute temporary image for Y axis
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 
 			gaussFilterY = 0;
 			coefsum = 0;
@@ -1149,8 +1396,8 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	}
 
 	//copy image
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 
 			ImageCopy[H][W] = tempImage[H][W];
 
@@ -1158,8 +1405,8 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	}
 
 	//compute temporary image for X axis
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 
 			gaussFilterX = 0;
 			coefsum = 0;
@@ -1181,8 +1428,8 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	}
 
 	//copy image
-	for(unsigned int H = 0; H < Height; H++){
-		for(unsigned int W = 0; W < Width; W++){
+	for(int H = 0; H < Height; H++){
+		for(int W = 0; W < Width; W++){
 			switch(channel){
 				case 0: img->Red[H][W] = (int)tempImage[H][W]; // copy image
 				break;
@@ -1196,7 +1443,7 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	}
 
 
-	for (unsigned int H = 0; H < Height; H++)
+	for (int H = 0; H < Height; H++)
 		delete tempImage[H];
 	delete tempImage;
 
@@ -1564,7 +1811,56 @@ int ImageProc::segmentation(Image* img,unsigned char populationSize){
 }
 
 
+int ImageProc::stitch(Image* img1,Image* img2){
 
+
+
+	return 0;
+}
+
+void ImageProc::Image::f_readAPP0(FILE* fp){
+
+//	uint16_t img_marker = 0;
+//	uint32_t cursor_position = 0;
+
+	const uint8_t APP0_buffer_length = 1; //nr of bytes
+	uint8_t* APP0_buffer = new uint8_t[APP0_buffer_length];
+
+//	uint8_t* APP0_buffer_test = new uint8_t[20];
+
+	if(NULL != fp){
+
+		for(int i = 0; i < 2; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+					this->struct_JPEG.struct_APP0.APP0_Length = (this->struct_JPEG.struct_APP0.APP0_Length << 8) + APP0_buffer[0];
+
+			}//end if APP0_Length
+		}//end for APP0_Length
+
+		for(int i = 0; i < 5; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+					this->struct_JPEG.struct_APP0.APP0_Identifier = (this->struct_JPEG.struct_APP0.APP0_Identifier << 8) + APP0_buffer[0];
+
+			}//end if APP0_Identifier
+		}//end for APP0_Identifier
+
+		for(int i = 0; i < 1; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+					printf_s("APP0_buffer = %x\n", APP0_buffer[0]);
+
+			}//end if APP0_Thumbnail_Format
+		}//end for APP0_Thumbnail_Format
+
+		printf("APP0_Length = %x\n", this->struct_JPEG.struct_APP0.APP0_Length);
+		printf("APP0_Identifier = %x\n", this->struct_JPEG.struct_APP0.APP0_Identifier);
+//		cursor_position = ftell(fp);
+//		printf_s("Position = %d\n",cursor_position);
+	}
+
+}
 
 //
 //
@@ -1632,6 +1928,8 @@ int ImageProc::CIMGInterface::readImage(ImageProc::Image* img, char* imgPath){
 			}
 		}
 	}
+
+//	img->Image_count += 1;
 
 	return 0;
 }

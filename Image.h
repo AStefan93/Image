@@ -6,14 +6,20 @@
 #include <math.h> //sine, cosine
 #include <random> //for generating population - genetic algorithm
 #include <algorithm>    // std::sort
+#include <stdint.h> //used for types(uint8_t, uint16_t etc)
 
 //external libs
 #include "CImg.h"
+
+//internal libs
+#include "Image_types.h"
 
 //added for time 
 #include <ctime>
 #include <cstdio>
 
+//DEFINES
+#define is_bigendian() ( (*(char*)&c_uint16_endian_test) == 0 ) // returns 1 if paltform is little_endian
 
 namespace ImageProc {
 
@@ -21,14 +27,14 @@ namespace ImageProc {
 	public:
 		Image(); //default contructor - 240*320 matrix with zeroes
 		Image(unsigned int ,unsigned int); //creates H*W matrix with zeroes
-		Image(char* ); //reads header and data from file image
+		Image(char* ); //reads header and data from path file image
 		~Image(); //deletes image
 		unsigned int getHeight();//Height function
-		int setHeight(int ); //set Height param
+		unsigned int setHeight(int ); //set Height param
 		unsigned int getWidth();// Width function
-		int setWidth(int ); //set Width param
+		unsigned int setWidth(int ); //set Width param
 		unsigned int getgrayLevel(); //the number of gray levels
-		int setgrayLevel(int); //sets the gray level
+		unsigned int setgrayLevel(int); //sets the gray level
 		std::string getType(); //gets the type
 		unsigned int** imageData; //the stored image pixels
 		unsigned int** Red;
@@ -36,8 +42,8 @@ namespace ImageProc {
 		unsigned int** Blue;
 		double* Hist; //vector for the histogram
 
-		int readPGM(char* ); //reads file into image
-		int writePGM(char* ); //writes image to file
+//		int readPGM(char* ); //reads file into image
+//		int writePGM(char* ); //writes image to file
 
 	private:
 		unsigned int Width; //width and height in pixels
@@ -45,10 +51,23 @@ namespace ImageProc {
 		unsigned int grayLevel; //number of gray levels can be any integer positive number
 		std::string imgType; //type of the image extracted from the header
 
-		void readPGMHeader(FILE* ); //read header of PGM file
-		void writePGMHeader(FILE* ); //writes a PGM header to file
+//		void readPGMHeader(FILE* ); //read header of PGM file
+//		void writePGMHeader(FILE* ); //writes a PGM header to file
+
+		static uint32_t Image_count; //counts objects for destructor
+
+		t_JPEG struct_JPEG;
+		void f_readAPP0(FILE* );
 
 	};
+
+	//class JPEG: public Image {
+
+	//	private:
+	//		t_JPEG struct_JPEG;
+
+	//		void f_readAPP0(FILE* );
+	//};
 
 	const double pi = std::acos(-1); // PI
 
@@ -73,6 +92,7 @@ namespace ImageProc {
 	int sobel(Image* ); //input image only overload - sobel image saved into input
 	int canny(Image* ,int );
 	int unsharp_masking(Image* ,Image* );
+	int stitch(Image* ,Image* );
 
 	int segmentation(Image*,unsigned char);
 

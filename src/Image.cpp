@@ -38,202 +38,242 @@ ImageProc::Image::Image(char const* fileName) {
 				switch(img_marker){
 
 					case SOI:
-						printf("SOI  = %x\n",img_marker);
-						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+						printf("SOI\n");
+				//		printf("SOI  = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 
 					case SOF0:
-						printf("SOF0 = %x\n",img_marker);
+						printf("SOF0\n");
+				//		printf("SOF0 = %x\n",img_marker);
+						cursor_position = ftell(fp);
+						printf_s("Position = %x\n",cursor_position);
+						break;
+
+					case SOF1:
+						printf("SOF1\n");
+				//		printf("SOF0 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 
 					case SOF2:
-						printf("SOF2 = %x\n",img_marker);
+						printf("SOF2\n");
+				//		printf("SOF2 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 
 					case DHT:
-						printf("DHT  = %x\n",img_marker);
+						printf("DHT\n");
+				//		printf("DHT  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 
 					case DQT:
-						printf("DQT  = %x\n",img_marker);
+						printf("DQT\n");
+				//		printf("DQT  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 
 					case DRI:
-						printf("DRI  = %x\n",img_marker);
+						printf("DRI\n");
+				//		printf("DRI  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case SOS:
-						printf("SOS  = %x\n",img_marker);
+						printf("SOS\n");
+				//		printf("SOS  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 											
 					case RST0:
-						printf("RST0 = %x\n",img_marker);
+						printf("RST0\n");
+				//		printf("RST0 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case RST1:
-						printf("RST1 = %x\n",img_marker);
+						printf("RST1\n");
+				//		printf("RST1 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case RST2:
-						printf("RST2 = %x\n",img_marker);
+						printf("RST2\n");
+				//		printf("RST2 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case RST3:
-						printf("RST3 = %x\n",img_marker);
+						printf("RST3\n");
+				//		printf("RST3 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 											
 					case RST4:
-						printf("RST4 = %x\n",img_marker);
+						printf("RST4\n");
+				//		printf("RST4 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case RST5:
-						printf("RST5 = %x\n",img_marker);
+						printf("RST5\n");
+				//		printf("RST5 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case RST6:
-						printf("RST6 = %x\n",img_marker);
+						printf("RST6\n");
+				//		printf("RST6 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case RST7:
-						printf("RST7 = %x\n",img_marker);
+						printf("RST7\n");
+				//		printf("RST7 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 											
 					case APP0:
-						printf("APP0 = %x\n",img_marker);
-						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+						printf("APP0\n");
+				//		printf("APP0 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf("Position = %x\n",cursor_position);
 
 						f_readAPP0(fp);
 
 						break;
 
 					case APP1:
-						printf("APP1 = %x\n",img_marker);
-						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+						printf("APP1\n");
+				//		printf("APP1 = %x\n",img_marker);
+				//		cursor_position = ftell(fp);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP2:
-						printf("APP2 = %x\n",img_marker);
+						printf("APP2\n");
+				//		printf("APP2 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP3:
-						printf("APP3 = %x\n",img_marker);
+						printf("APP3\n");
+				//		printf("APP3 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP4:
-						printf("APP4 = %x\n",img_marker);
+						printf("APP4\n");
+				//		printf("APP4 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP5:
-						printf("APP5 = %x\n",img_marker);
+						printf("APP5\n");
+				//		printf("APP5 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP6:
-						printf("APP6 = %x\n",img_marker);
+						printf("APP6\n");
+				//		printf("APP6 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP7:
-						printf("APP7 = %x\n",img_marker);
+						printf("APP7\n");
+				//		printf("APP7 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP8:
-						printf("APP8 = %x\n",img_marker);
+						printf("APP8\n");
+				//		printf("APP8 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP9:
-						printf("APP9 = %x\n",img_marker);
+						printf("APP9\n");
+				//		printf("APP9 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP10:
-						printf("APP10 = %x\n",img_marker);
+						printf("APP10\n");
+				//		printf("APP10 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP11:
-						printf("APP11 = %x\n",img_marker);
+						printf("APP11\n");
+				//		printf("APP11 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP12:
-						printf("APP12 = %x\n",img_marker);
+						printf("APP12\n");
+				//		printf("APP12 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP13:
-						printf("APP13 = %x\n",img_marker);
+						printf("APP13\n");
+				//		printf("APP13 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP14:
-						printf("APP14 = %x\n",img_marker);
+						printf("APP14\n");
+				//		printf("APP14 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 					
 					case APP15:
-						printf("APP15 = %x\n",img_marker);
+						printf("APP15\n");
+				//		printf("APP15 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 
 					
 					case COM:
-						printf("COM  = %x\n",img_marker);
+						printf("COM\n");
+				//		printf("COM  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf_s("Position = %x\n",cursor_position);
 						break;
 
 					case EOI:
+						printf("EOI\n");
 						printf("EOI  = %x\n",img_marker);
 						cursor_position = ftell(fp);
 						printf("Position = %x\n",cursor_position);
@@ -627,7 +667,7 @@ int ImageProc::impulse_filter(Image* img,int windowSize){
 
 	if((windowSize%2 == 0) || (windowSize < 3)){
 		std::cout << "windowSize must be odd and higher or equal to 3" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
@@ -700,13 +740,13 @@ int ImageProc::average_filter(Image* img,int windowSize,int n ){
 
 	if((windowSize%2 == 0) || (windowSize < 3)){
 		std::cout << "windowSize must be odd and higher or equal to 3" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
 	if((n < 1)){
 		std::cout << "n must be higher or equal to 1" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
@@ -809,13 +849,13 @@ int ImageProc::average_filter_color_sqrt(Image* img,int windowSize,int n,int cha
 
 	if((windowSize%2 == 0) || (windowSize < 3)){
 		std::cout << "windowSize must be odd and higher or equal to 3" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
 	if((n < 1)){
 		std::cout << "n must be higher or equal to 1" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
@@ -944,13 +984,13 @@ int ImageProc::average_filter_color_normal(Image* img,int windowSize,int n,int c
 
 	if((windowSize%2 == 0) || (windowSize < 3)){
 		std::cout << "windowSize must be odd and higher or equal to 3" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
 	if((n < 1)){
 		std::cout << "n must be higher or equal to 1" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
@@ -1079,7 +1119,7 @@ int ImageProc::gaussian_filter(Image* img,int sigma){
 
 	if(sigma < 1){
 		std::cout << "Sigma must be higher or equal to 1" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
@@ -1187,7 +1227,7 @@ int ImageProc::bilateral_filterGray(Image* img,int sigma){
 	//gaussian filter with dynamic edge adjustment
 	if(sigma < 1){
 		std::cout << "Sigma must be higher or equal to 1" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
@@ -1312,12 +1352,12 @@ int ImageProc::bilateral_filterColor(Image* img,int sigma,int channel){
 	//gaussian filter with dynamic edge adjustment
 	if(sigma < 1){
 		std::cout << "Sigma must be higher or equal to 1" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 	if(channel < 0 || channel > 2){
 		std::cout << "Channel must be between 0 and 2, where 0 is Red and 2 is Blue" << std::endl;
-		getchar();
+	//	getchar();
 		exit(-1);
 	}
 
@@ -1846,16 +1886,62 @@ void ImageProc::Image::f_readAPP0(FILE* fp){
 			}//end if APP0_Identifier
 		}//end for APP0_Identifier
 
+		for(int i = 0; i < 2; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+				this->struct_JPEG.struct_APP0.APP0_JFIF_Version = (this->struct_JPEG.struct_APP0.APP0_JFIF_Version << 8) + APP0_buffer[0];
+
+			}//end if APP0_JFIF_Version
+		}//end for APP0_JFIF_Version
+
 		for(int i = 0; i < 1; i++){
 			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
 
-					printf("APP0_buffer = %x\n", APP0_buffer[0]);
+				this->struct_JPEG.struct_APP0.APP0_DensityUnits = APP0_buffer[0];
 
-			}//end if APP0_Thumbnail_Format
-		}//end for APP0_Thumbnail_Format
+			}//end if APP0_DensityUnits
+		}//end for APP0_DensityUnits
 
-		printf("APP0_Length = %x\n", this->struct_JPEG.struct_APP0.APP0_Length);
+		for(int i = 0; i < 2; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+				this->struct_JPEG.struct_APP0.APP0_Xdensity = (this->struct_JPEG.struct_APP0.APP0_Xdensity << 8) + APP0_buffer[0];
+
+			}//end if APP0_Xdensity
+		}//end for APP0_Xdensity
+
+		for(int i = 0; i < 2; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+				this->struct_JPEG.struct_APP0.APP0_Ydensity = (this->struct_JPEG.struct_APP0.APP0_Ydensity << 8) + APP0_buffer[0];
+
+			}//end if APP0_Ydensity
+		}//end for APP0_Ydensity
+
+		for(int i = 0; i < 1; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+				this->struct_JPEG.struct_APP0.APP0_Xthumbnail = (this->struct_JPEG.struct_APP0.APP0_Xthumbnail << 8) + APP0_buffer[0];
+
+			}//end if APP0_Xthumbnail
+		}//end for APP0_Xthumbnail
+
+		for(int i = 0; i < 1; i++){
+			if((APP0_buffer_length == fread(APP0_buffer, sizeof(APP0_buffer[0]), APP0_buffer_length, fp))){
+
+				this->struct_JPEG.struct_APP0.APP0_Ythumbnail = (this->struct_JPEG.struct_APP0.APP0_Ythumbnail << 8) + APP0_buffer[0];
+
+			}//end if APP0_Ythumbnail
+		}//end for APP0_Ythumbnail
+
+		printf("APP0_Length = %d\n", this->struct_JPEG.struct_APP0.APP0_Length);
 		printf("APP0_Identifier = %x\n", this->struct_JPEG.struct_APP0.APP0_Identifier);
+		printf("APP0_JFIF_Version = %x\n", this->struct_JPEG.struct_APP0.APP0_JFIF_Version);
+		printf("APP0_DensityUnits = %x\n", this->struct_JPEG.struct_APP0.APP0_DensityUnits);
+		printf("APP0_Xdensity = %x\n", this->struct_JPEG.struct_APP0.APP0_Xdensity);
+		printf("APP0_Ydensity = %x\n", this->struct_JPEG.struct_APP0.APP0_Ydensity);
+		printf("APP0_Xthumbnail = %x\n", this->struct_JPEG.struct_APP0.APP0_Xthumbnail);
+		printf("APP0_Ythumbnail = %x\n", this->struct_JPEG.struct_APP0.APP0_Ythumbnail);
 //		cursor_position = ftell(fp);
 //		printf_s("Position = %d\n",cursor_position);
 	}

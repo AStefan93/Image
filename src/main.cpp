@@ -6,20 +6,21 @@ namespace imgintf = ImageProc::CIMGInterface;
 
 int main(int, char**) { 
 
-	char const* image_path = "test/lena.bmp";
-//	char const* image_path2 = "test/stitching/IMG_3204.jpg";
+//	char const* image_path = "test/lena.bmp";
+	char const* image_path2 = "test/stitching/IMG_3204.jpg";
+//	char const* image_path2 = "test/JPEG1.jpg";
 
 	std::clock_t start;
 	double duration;
 
 	start = std::clock();
 
-	ImageProc::Image* img = new ImageProc::Image[1];
+//	ImageProc::Image* img = new ImageProc::Image[1];
 //	ImageProc::Image* img2 = new ImageProc::Image[1];
 
-//	ImageProc::Image img3(image_path2);
+	ImageProc::Image img3(image_path2);
 
-	imgintf::readImage(img,image_path);
+//	imgintf::readImage(img,image_path);
 //	imgintf::readImage(img2,image_path);
 //	ImageProc::gaussian_filter(img,3);
 //	ImageProc::rotate(img,30);
@@ -36,7 +37,7 @@ int main(int, char**) {
 //	ImageProc::computeHistogram(img);
 //	ImageProc::computeHistogram(img2);
 
-	cimg_library::CImgDisplay init_disp(imgintf::displayImageGray(img));
+//	cimg_library::CImgDisplay init_disp(imgintf::displayImageGray(img));
 //	cimg_library::CImgDisplay init2_disp(imgintf::displayHist(img));
 //	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(img2));
 //	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(img2));
@@ -47,7 +48,7 @@ int main(int, char**) {
 
 	std::cout << "Time: " << duration << '\n';
 
-	getchar();
+//	getchar();
 
 	return 0;
 }

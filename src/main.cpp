@@ -1,4 +1,5 @@
 //Arnautu Stefan Image Processing
+//Property of Nobody
 
 #include "Image.h"
 

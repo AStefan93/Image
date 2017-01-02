@@ -48,105 +48,105 @@ ImageProc::Image::Image(char const* fileName) {
 						printf("SOF0\n");
 				//		printf("SOF0 = %x\n",img_marker);
 						cursor_position = ftell(fp);
-						printf_s("Position = %x\n",cursor_position);
+						printf("Position = %x\n",cursor_position);
 						break;
 
 					case SOF1:
 						printf("SOF1\n");
 				//		printf("SOF0 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 
 					case SOF2:
 						printf("SOF2\n");
 				//		printf("SOF2 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 
 					case DHT:
 						printf("DHT\n");
 				//		printf("DHT  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 
 					case DQT:
 						printf("DQT\n");
 				//		printf("DQT  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 
 					case DRI:
 						printf("DRI\n");
 				//		printf("DRI  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case SOS:
 						printf("SOS\n");
 				//		printf("SOS  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 											
 					case RST0:
 						printf("RST0\n");
 				//		printf("RST0 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case RST1:
 						printf("RST1\n");
 				//		printf("RST1 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case RST2:
 						printf("RST2\n");
 				//		printf("RST2 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case RST3:
 						printf("RST3\n");
 				//		printf("RST3 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 											
 					case RST4:
 						printf("RST4\n");
 				//		printf("RST4 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case RST5:
 						printf("RST5\n");
 				//		printf("RST5 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case RST6:
 						printf("RST6\n");
 				//		printf("RST6 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case RST7:
 						printf("RST7\n");
 				//		printf("RST7 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 											
 					case APP0:
@@ -170,98 +170,98 @@ ImageProc::Image::Image(char const* fileName) {
 						printf("APP2\n");
 				//		printf("APP2 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP3:
 						printf("APP3\n");
 				//		printf("APP3 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP4:
 						printf("APP4\n");
 				//		printf("APP4 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP5:
 						printf("APP5\n");
 				//		printf("APP5 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP6:
 						printf("APP6\n");
 				//		printf("APP6 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP7:
 						printf("APP7\n");
 				//		printf("APP7 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP8:
 						printf("APP8\n");
 				//		printf("APP8 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP9:
 						printf("APP9\n");
 				//		printf("APP9 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP10:
 						printf("APP10\n");
 				//		printf("APP10 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP11:
 						printf("APP11\n");
 				//		printf("APP11 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP12:
 						printf("APP12\n");
 				//		printf("APP12 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP13:
 						printf("APP13\n");
 				//		printf("APP13 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP14:
 						printf("APP14\n");
 				//		printf("APP14 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 					
 					case APP15:
 						printf("APP15\n");
 				//		printf("APP15 = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 
 					
@@ -269,7 +269,7 @@ ImageProc::Image::Image(char const* fileName) {
 						printf("COM\n");
 				//		printf("COM  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
-				//		printf_s("Position = %x\n",cursor_position);
+				//		printf("Position = %x\n",cursor_position);
 						break;
 
 					case EOI:
@@ -1943,7 +1943,7 @@ void ImageProc::Image::f_readAPP0(FILE* fp){
 		printf("APP0_Xthumbnail = %x\n", this->struct_JPEG.struct_APP0.APP0_Xthumbnail);
 		printf("APP0_Ythumbnail = %x\n", this->struct_JPEG.struct_APP0.APP0_Ythumbnail);
 //		cursor_position = ftell(fp);
-//		printf_s("Position = %d\n",cursor_position);
+//		printf("Position = %d\n",cursor_position);
 	}
 
 }

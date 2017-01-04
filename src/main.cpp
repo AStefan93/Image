@@ -1,4 +1,5 @@
 //Arnautu Stefan Image Processing
+//Property of Nobody
 
 #include "Image.h"
 
@@ -6,8 +7,9 @@ namespace imgintf = ImageProc::CIMGInterface;
 
 int main(int, char**) { 
 
-//	char const* image_path = "test/lena.bmp";
-	char const* image_path2 = "test/stitching/IMG_3204.JPG";
+	char const* image_path2 = "test/lena_baseline_grayscale.jpg";
+//	char const* image_path2 = "test/stitching/IMG_3204.jpg";
+//	char const* image_path2 = "test/JPEG1.jpg";
 
 	std::clock_t start;
 	double duration;
@@ -47,7 +49,7 @@ int main(int, char**) {
 
 	std::cout << "Time: " << duration << '\n';
 
-	getchar();
+//	getchar();
 
 	return 0;
 }

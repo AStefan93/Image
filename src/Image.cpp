@@ -47,8 +47,9 @@ ImageProc::Image::Image(char const* fileName) {
 					case SOF0:
 						printf("SOF0\n");
 				//		printf("SOF0 = %x\n",img_marker);
-						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+				//		cursor_position = ftell(fp);
+				//		printf("Position = %x\n",cursor_position);
+						f_readSOF0(fp);
 						break;
 
 					case SOF1:
@@ -1934,14 +1935,42 @@ void ImageProc::Image::f_readAPP0(FILE* fp){
 			}//end if APP0_Ythumbnail
 		}//end for APP0_Ythumbnail
 
-		printf("APP0_Length = %d\n", this->struct_JPEG.struct_APP0.APP0_Length);
-		printf("APP0_Identifier = %x\n", this->struct_JPEG.struct_APP0.APP0_Identifier);
-		printf("APP0_JFIF_Version = %x\n", this->struct_JPEG.struct_APP0.APP0_JFIF_Version);
-		printf("APP0_DensityUnits = %x\n", this->struct_JPEG.struct_APP0.APP0_DensityUnits);
-		printf("APP0_Xdensity = %x\n", this->struct_JPEG.struct_APP0.APP0_Xdensity);
-		printf("APP0_Ydensity = %x\n", this->struct_JPEG.struct_APP0.APP0_Ydensity);
-		printf("APP0_Xthumbnail = %x\n", this->struct_JPEG.struct_APP0.APP0_Xthumbnail);
-		printf("APP0_Ythumbnail = %x\n", this->struct_JPEG.struct_APP0.APP0_Ythumbnail);
+//		printf("APP0_Length = %d\n", this->struct_JPEG.struct_APP0.APP0_Length);
+//		printf("APP0_Identifier = %x\n", this->struct_JPEG.struct_APP0.APP0_Identifier);
+//		printf("APP0_JFIF_Version = %x\n", this->struct_JPEG.struct_APP0.APP0_JFIF_Version);
+//		printf("APP0_DensityUnits = %d\n", this->struct_JPEG.struct_APP0.APP0_DensityUnits);
+//		printf("APP0_Xdensity = %d\n", this->struct_JPEG.struct_APP0.APP0_Xdensity);
+//		printf("APP0_Ydensity = %d\n", this->struct_JPEG.struct_APP0.APP0_Ydensity);
+//		printf("APP0_Xthumbnail = %d\n", this->struct_JPEG.struct_APP0.APP0_Xthumbnail);
+//		printf("APP0_Ythumbnail = %d\n", this->struct_JPEG.struct_APP0.APP0_Ythumbnail);
+//		cursor_position = ftell(fp);
+//		printf("Position = %d\n",cursor_position);
+	}
+
+}
+
+void ImageProc::Image::f_readSOF0(FILE* fp){
+
+//	uint16_t img_marker = 0;
+//	uint32_t cursor_position = 0;
+
+	const uint8_t SOF0_buffer_length = 1; //nr of bytes
+	uint8_t* SOF0_buffer = new uint8_t[SOF0_buffer_length];
+
+//	uint8_t* APP0_buffer_test = new uint8_t[20];
+
+	if(NULL != fp){
+
+		for(int i = 0; i < 2; i++){
+			if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
+
+					this->struct_JPEG.struct_SOF0.SOF0_Length = (this->struct_JPEG.struct_SOF0.SOF0_Length << 8) + SOF0_buffer[0];
+
+			}//end if APP0_Length
+		}//end for APP0_Length
+
+		printf("SOF0_Length = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Length);
+		
 //		cursor_position = ftell(fp);
 //		printf("Position = %d\n",cursor_position);
 	}

@@ -43,8 +43,21 @@ typedef struct t_APP0_tag{
 
 }t_APP0;
 
+
+typedef struct t_SOF0_tag{
+	
+	uint64_t SOF0_Length:16; // size is 2 bytes - Length of segment excluding APP0 marker - This value equals to 8 + components*3 value
+	uint64_t SOF0_DataPrecision:8; //size is 1 byte - precision of image in bits (usually 8 bits for baseline JPEG)
+	uint64_t SOF0_ImageHeight:16; //size is 2 bytes
+	uint64_t SOF0_ImageWidth:16; //size is 2 bytes 
+	uint64_t SOF0_NumberOfComponents:8; //number of components in image (3 for collor and 1 for grayscale)
+	//pointer to pointer to pointer
+
+}t_SOF0;
+
 typedef struct t_JPEG_tag{
 	// JPEG image starts with SOI and ends with EOI
 	t_APP0 struct_APP0; //size is 16 bytes
+	t_SOF0 struct_SOF0; //size is 16 bytes
 }t_JPEG;
 

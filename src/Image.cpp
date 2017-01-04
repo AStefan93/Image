@@ -40,7 +40,7 @@ ImageProc::Image::Image(char const* fileName) {
 					case SOI:
 						printf("SOI  = %x\n",img_marker);
 						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+						printf("Position = %d\n",cursor_position);
 						break;
 
 					case SOF0:
@@ -130,7 +130,7 @@ ImageProc::Image::Image(char const* fileName) {
 					case APP0:
 						printf("APP0 = %x\n",img_marker);
 						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+						printf("Position = %d\n",cursor_position);
 
 						f_readAPP0(fp);
 
@@ -139,7 +139,7 @@ ImageProc::Image::Image(char const* fileName) {
 					case APP1:
 						printf("APP1 = %x\n",img_marker);
 						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+						printf("Position = %d\n",cursor_position);
 						break;
 					
 					case APP2:
@@ -236,7 +236,7 @@ ImageProc::Image::Image(char const* fileName) {
 					case EOI:
 						printf("EOI  = %x\n",img_marker);
 						cursor_position = ftell(fp);
-						printf("Position = %x\n",cursor_position);
+						printf("Position = %d\n",cursor_position);
 						break;
 
 					default:

@@ -28,7 +28,7 @@ enum AppMarkerTypes
 
 typedef struct t_APP0_tag{
 	
-	uint64_t APP0_Length:16; // size is 2 bytes - Length of segment excluding APP0 marker
+	uint64_t APP0_Length:16; // size is 2 bytes - Length of segment excluding APP0 marker but including length information
 	uint64_t APP0_Identifier:40; //size is 5 bytes - 4A 46 58 58 00 = "JFXX" in ASCII, terminated by a null byte
 	uint64_t APP0_DensityUnits:8; /*size is 1 byte 
 									Units for the following pixel density fields 
@@ -43,21 +43,40 @@ typedef struct t_APP0_tag{
 
 }t_APP0;
 
+typedef struct t_SOF0_Component_tag{
+	
+	uint32_t SOF0_Component_ID:8; //size is 1 byte - ID of the component 1 = Y, 2 = Cb, 3 = Cr, 4 = I, 5 = Q
+	uint32_t SOF0_Component_Sampling:8;  //size is 1 byte - sampling factors bit 0-3 vertical., 4-7 horizontal
+	uint32_t SOF0_Component_DQTNumber:8; //size is 1 byte -	quantization table number
+	
+}t_SOF0_Component;
 
 typedef struct t_SOF0_tag{
 	
-	uint64_t SOF0_Length:16; // size is 2 bytes - Length of segment excluding APP0 marker - This value equals to 8 + components*3 value
+	uint64_t SOF0_Length:16; // size is 2 bytes - Length of segment excluding SOF0 marker but including length information - This value equals to 8 + components*3 value
 	uint64_t SOF0_DataPrecision:8; //size is 1 byte - precision of image in bits (usually 8 bits for baseline JPEG)
 	uint64_t SOF0_ImageHeight:16; //size is 2 bytes
 	uint64_t SOF0_ImageWidth:16; //size is 2 bytes 
 	uint64_t SOF0_NumberOfComponents:8; //number of components in image (3 for collor and 1 for grayscale)
-	//pointer to pointer to pointer
+	t_SOF0_Component *SOF0_Component;//pointer to struct
 
 }t_SOF0;
+
+typedef struct t_DQT_tag{
+	
+	uint64_t DQT_Length:16; // size is 2 bytes - Length of segment excluding DQT marker but including length information
+	uint64_t DQT_TableInformation:8; //size is 1 byte  - bit 0..3: number of QT (0..3, otherwise error) bit 4..7: precision of QT, 0 = 8 bit, 1 = 16 bit
+	uint64_t DQT_QTID:4; // quantization table ID
+	uint64_t DQT_PrecisionOfQT:4; // precision of QT, 0 = 8 bit, 1 = 16 bit
+	uint8_t *DQT_TableElement; //size is 64 * (DQT_PrecisionOfQT + 1) - order for 128 is HIGH-LOW
+	
+}t_DQT;
 
 typedef struct t_JPEG_tag{
 	// JPEG image starts with SOI and ends with EOI
 	t_APP0 struct_APP0; //size is 16 bytes
-	t_SOF0 struct_SOF0; //size is 16 bytes
+	t_SOF0 struct_SOF0; //size is more than 16 bytes
+	t_DQT struct_DQT; //size is more than 16 bytes
+	
 }t_JPEG;
 

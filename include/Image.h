@@ -59,6 +59,7 @@ namespace ImageProc {
 		t_JPEG struct_JPEG;
 		void f_readAPP0(FILE* );
 		void f_readSOF0(FILE* );
+		void f_readDQT(FILE* );
 
 	};
 

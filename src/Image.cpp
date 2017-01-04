@@ -78,6 +78,9 @@ ImageProc::Image::Image(char const* fileName) {
 				//		printf("DQT  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf("Position = %x\n",cursor_position);
+				
+						f_readDQT(fp);
+						
 						break;
 
 					case DRI:
@@ -1966,13 +1969,140 @@ void ImageProc::Image::f_readSOF0(FILE* fp){
 
 					this->struct_JPEG.struct_SOF0.SOF0_Length = (this->struct_JPEG.struct_SOF0.SOF0_Length << 8) + SOF0_buffer[0];
 
-			}//end if APP0_Length
-		}//end for APP0_Length
+			}//end if SOF0_Length
+		}//end for SOF0_Length
+		
+		for(int i = 0; i < 1; i++){
+			if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
 
-		printf("SOF0_Length = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Length);
+					this->struct_JPEG.struct_SOF0.SOF0_DataPrecision = (this->struct_JPEG.struct_SOF0.SOF0_DataPrecision << 8) + SOF0_buffer[0];
+
+			}//end if SOF0_DataPrecision
+		}//end for SOF0_DataPrecision
+		
+		for(int i = 0; i < 2; i++){
+			if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
+
+					this->struct_JPEG.struct_SOF0.SOF0_ImageHeight = (this->struct_JPEG.struct_SOF0.SOF0_ImageHeight << 8) + SOF0_buffer[0];
+
+			}//end if SOF0_ImageHeight
+		}//end for SOF0_ImageHeight
+		
+		for(int i = 0; i < 2; i++){
+			if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
+
+					this->struct_JPEG.struct_SOF0.SOF0_ImageWidth = (this->struct_JPEG.struct_SOF0.SOF0_ImageWidth << 8) + SOF0_buffer[0];
+
+			}//end if SOF0_ImageWidth
+		}//end for SOF0_ImageWidth
+		
+		for(int i = 0; i < 1; i++){
+			if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
+
+					this->struct_JPEG.struct_SOF0.SOF0_NumberOfComponents = (this->struct_JPEG.struct_SOF0.SOF0_NumberOfComponents << 8) + SOF0_buffer[0];
+
+			}//end if SOF0_NumberOfComponents
+		}//end for SOF0_NumberOfComponents
+		
+		this->struct_JPEG.struct_SOF0.SOF0_Component = new t_SOF0_Component[this->struct_JPEG.struct_SOF0.SOF0_NumberOfComponents];
+		
+		for(int j = 0; j < this->struct_JPEG.struct_SOF0.SOF0_NumberOfComponents; j++){
+			
+			for(int i = 0; i < 1; i++){
+				if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
+
+						this->struct_JPEG.struct_SOF0.SOF0_Component[j].SOF0_Component_ID = (this->struct_JPEG.struct_SOF0.SOF0_Component[j].SOF0_Component_ID << 8) + SOF0_buffer[0];
+
+				}//end if SOF0_Component_ID
+			}//end for SOF0_Component_ID
+			
+			for(int i = 0; i < 1; i++){
+				if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
+
+						this->struct_JPEG.struct_SOF0.SOF0_Component[j].SOF0_Component_Sampling = (this->struct_JPEG.struct_SOF0.SOF0_Component[j].SOF0_Component_Sampling << 8) + SOF0_buffer[0];
+
+				}//end if SOF0_Component_Sampling
+			}//end for SOF0_Component_Sampling
+			
+			for(int i = 0; i < 1; i++){
+				if((SOF0_buffer_length == fread(SOF0_buffer, sizeof(SOF0_buffer[0]), SOF0_buffer_length, fp))){
+
+						this->struct_JPEG.struct_SOF0.SOF0_Component[j].SOF0_Component_DQTNumber = (this->struct_JPEG.struct_SOF0.SOF0_Component[j].SOF0_Component_DQTNumber << 8) + SOF0_buffer[0];
+
+				}//end if SOF0_Component_DQTNumber
+			}//end for SOF0_Component_DQTNumber
+			
+		}
+		
+
+		// printf("SOF0_Length = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Length);
+		// printf("SOF0_DataPrecision = %d\n", this->struct_JPEG.struct_SOF0.SOF0_DataPrecision);
+		// printf("SOF0_ImageHeight = %d\n", this->struct_JPEG.struct_SOF0.SOF0_ImageHeight);
+		// printf("SOF0_ImageWidth = %d\n", this->struct_JPEG.struct_SOF0.SOF0_ImageWidth);
+		// printf("SOF0_NumberOfComponents = %d\n", this->struct_JPEG.struct_SOF0.SOF0_NumberOfComponents);
+		// printf("SOF0_Component_ID = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[0].SOF0_Component_ID);
+		// printf("SOF0_Component_Sampling = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[0].SOF0_Component_Sampling);
+		// printf("SOF0_Component_DQTNumber = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[0].SOF0_Component_DQTNumber);
+		// printf("SOF0_Component_ID = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[1].SOF0_Component_ID);
+		// printf("SOF0_Component_Sampling = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[1].SOF0_Component_Sampling);
+		// printf("SOF0_Component_DQTNumber = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[1].SOF0_Component_DQTNumber);
+		// printf("SOF0_Component_ID = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[2].SOF0_Component_ID);
+		// printf("SOF0_Component_Sampling = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[2].SOF0_Component_Sampling);
+		// printf("SOF0_Component_DQTNumber = %d\n", this->struct_JPEG.struct_SOF0.SOF0_Component[2].SOF0_Component_DQTNumber);
 		
 //		cursor_position = ftell(fp);
 //		printf("Position = %d\n",cursor_position);
+	}
+
+}
+
+void ImageProc::Image::f_readDQT(FILE* fp){
+
+
+	const uint8_t DQT_buffer_length = 1; //nr of bytes
+	uint8_t* DQT_buffer = new uint8_t[DQT_buffer_length];
+
+
+	if(NULL != fp){
+
+		for(int i = 0; i < 2; i++){
+			if((DQT_buffer_length == fread(DQT_buffer, sizeof(DQT_buffer[0]), DQT_buffer_length, fp))){
+
+					this->struct_JPEG.struct_DQT.DQT_Length = (this->struct_JPEG.struct_DQT.DQT_Length << 8) + DQT_buffer[0];
+
+			}//end if DQT_Length
+		}//end for DQT_Length
+		
+		for(int i = 0; i < 1; i++){
+			if((DQT_buffer_length == fread(DQT_buffer, sizeof(DQT_buffer[0]), DQT_buffer_length, fp))){
+
+					this->struct_JPEG.struct_DQT.DQT_TableInformation = (this->struct_JPEG.struct_DQT.DQT_TableInformation << 8) + DQT_buffer[0];
+
+			}//end if DQT_TableInformation
+		}//end for DQT_TableInformation
+		
+		this->struct_JPEG.struct_DQT.DQT_QTID = this->struct_JPEG.struct_DQT.DQT_TableInformation & 0x0F;
+		this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT = this->struct_JPEG.struct_DQT.DQT_TableInformation & 0xF0;
+		
+		this->struct_JPEG.struct_DQT.DQT_TableElement = new uint8_t[64 * (this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT + 1)];
+
+		
+		for(int j = 0; j < 64 * (this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT + 1); j++){
+			
+			for(int i = 0; i < 1; i++){
+				if((DQT_buffer_length == fread(DQT_buffer, sizeof(DQT_buffer[0]), DQT_buffer_length, fp))){
+	
+						this->struct_JPEG.struct_DQT.DQT_TableElement[j] = (this->struct_JPEG.struct_DQT.DQT_QuantizationTable[j].DQT_Component_ID << 8) + DQT_buffer[0];
+	
+				}//end if DQT_Component_ID
+			}//end for DQT_Component_ID
+		
+		}
+		printf("DQT_Length = %lu\n", this->struct_JPEG.struct_DQT.DQT_Length);
+		printf("DQT_TableInformation = %lu\n", this->struct_JPEG.struct_DQT.DQT_TableInformation);
+		printf("DQT_NumberOfQT = %lu\n", this->struct_JPEG.struct_DQT.DQT_NumberOfQT);
+		printf("DQT_PrecisionOfQT = %lu\n", this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT);
+	
 	}
 
 }

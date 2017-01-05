@@ -71,6 +71,9 @@ ImageProc::Image::Image(char const* fileName) {
 				//		printf("DHT  = %x\n",img_marker);
 				//		cursor_position = ftell(fp);
 				//		printf("Position = %x\n",cursor_position);
+				
+						f_readDHT(fp);
+						
 						break;
 
 					case DQT:
@@ -2092,16 +2095,64 @@ void ImageProc::Image::f_readDQT(FILE* fp){
 			for(int i = 0; i < 1; i++){
 				if((DQT_buffer_length == fread(DQT_buffer, sizeof(DQT_buffer[0]), DQT_buffer_length, fp))){
 	
-						this->struct_JPEG.struct_DQT.DQT_TableElement[j] = (this->struct_JPEG.struct_DQT.DQT_QuantizationTable[j].DQT_Component_ID << 8) + DQT_buffer[0];
+						this->struct_JPEG.struct_DQT.DQT_TableElement[j] = (this->struct_JPEG.struct_DQT.DQT_TableElement[j] << 8) + DQT_buffer[0];
+						// printf("DQT_TableElement[%d] = %d\n", j, this->struct_JPEG.struct_DQT.DQT_TableElement[j]);
 	
 				}//end if DQT_Component_ID
 			}//end for DQT_Component_ID
 		
 		}
-		printf("DQT_Length = %lu\n", this->struct_JPEG.struct_DQT.DQT_Length);
-		printf("DQT_TableInformation = %lu\n", this->struct_JPEG.struct_DQT.DQT_TableInformation);
-		printf("DQT_NumberOfQT = %lu\n", this->struct_JPEG.struct_DQT.DQT_NumberOfQT);
-		printf("DQT_PrecisionOfQT = %lu\n", this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT);
+		// printf("DQT_Length = %lu\n", this->struct_JPEG.struct_DQT.DQT_Length);
+		// printf("DQT_TableInformation = %lu\n", this->struct_JPEG.struct_DQT.DQT_TableInformation);
+		// printf("DQT_QTID = %lu\n", this->struct_JPEG.struct_DQT.DQT_QTID);
+		// printf("DQT_PrecisionOfQT = %lu\n", this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT);
+	
+	}
+
+}
+
+void ImageProc::Image::f_readDHT(FILE* fp){
+
+
+	const uint8_t DHT_buffer_length = 1; //nr of bytes
+	uint8_t* DHT_buffer = new uint8_t[DHT_buffer_length];
+
+	if(NULL != fp){
+
+		for(int i = 0; i < 2; i++){
+			if((DHT_buffer_length == fread(DHT_buffer, sizeof(DHT_buffer[0]), DHT_buffer_length, fp))){
+
+					this->struct_JPEG.struct_DHT.DHT_Length = (this->struct_JPEG.struct_DHT.DHT_Length << 8) + DHT_buffer[0];
+
+			}//end if DHT_Length
+		}//end for DHT_Length
+		
+		for(int i = 0; i < 1; i++){
+			if((DHT_buffer_length == fread(DHT_buffer, sizeof(DHT_buffer[0]), DHT_buffer_length, fp))){
+
+					this->struct_JPEG.struct_DHT.DHT_TableInformation = (this->struct_JPEG.struct_DHT.DHT_TableInformation << 8) + DHT_buffer[0];
+
+			}//end if DHT_TableInformation
+		}//end for DHT_TableInformation
+		
+		this->struct_JPEG.struct_DHT.DHT_NumberOfElements = new uint8_t[16];
+		
+		for(int j = 0; j < 16; j++){
+			
+			for(int i = 0; i < 1; i++){
+				if((DHT_buffer_length == fread(DHT_buffer, sizeof(DHT_buffer[0]), DHT_buffer_length, fp))){
+
+					this->struct_JPEG.struct_DHT.DHT_NumberOfElements[j] = (this->struct_JPEG.struct_DHT.DHT_NumberOfElements[j] << 8) + DHT_buffer[0];
+					
+					printf("DHT_NumberOfElements[%d] = %d\n", j, this->struct_JPEG.struct_DHT.DHT_NumberOfElements[j]);
+					
+				}//end if DHT_NumberOfElements
+			}//end for DHT_NumberOfElements
+		
+			
+		}
+		
+		 printf("DHT_Length = %lu\n", this->struct_JPEG.struct_DHT.DHT_Length);
 	
 	}
 

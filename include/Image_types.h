@@ -72,11 +72,23 @@ typedef struct t_DQT_tag{
 	
 }t_DQT;
 
+typedef struct t_DHT_tag{
+	
+	uint64_t DHT_Length:16; // size is 2 bytes - Length of segment excluding DQT marker but including length information
+	uint64_t DHT_TableInformation:8; //size is 1 byte - ??
+	uint64_t DHT_HuffmanTableID:4; // Huffman table ID
+	uint64_t DHT_PrecisionOfQT:4; // precision of HT, 0 = DC table, 1 = AC table
+	uint8_t *DHT_NumberOfElements; // ??
+	uint8_t *DHT_TableElement; // ??
+	
+}t_DHT;
+
 typedef struct t_JPEG_tag{
 	// JPEG image starts with SOI and ends with EOI
 	t_APP0 struct_APP0; //size is 16 bytes
 	t_SOF0 struct_SOF0; //size is more than 16 bytes
 	t_DQT struct_DQT; //size is more than 16 bytes
+	t_DHT struct_DHT;
 	
 }t_JPEG;
 

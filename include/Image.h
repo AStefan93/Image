@@ -60,6 +60,7 @@ namespace ImageProc {
 		void f_readAPP0(FILE* );
 		void f_readSOF0(FILE* );
 		void f_readDQT(FILE* );
+		void f_readDHT(FILE* );
 
 	};
 

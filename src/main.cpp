@@ -15,7 +15,7 @@ int main(int, char**) {
 	double duration;
 
 	start = std::clock();
-
+	
 //	ImageProc::Image* img = new ImageProc::Image[1];
 //	ImageProc::Image* img2 = new ImageProc::Image[1];
 

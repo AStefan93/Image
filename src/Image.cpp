@@ -2085,7 +2085,7 @@ void ImageProc::Image::f_readDQT(FILE* fp){
 		}//end for DQT_TableInformation
 		
 		this->struct_JPEG.struct_DQT.DQT_QTID = this->struct_JPEG.struct_DQT.DQT_TableInformation & 0x0F;
-		this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT = this->struct_JPEG.struct_DQT.DQT_TableInformation & 0xF0;
+		this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT = (this->struct_JPEG.struct_DQT.DQT_TableInformation & 0xF0) >> 4;
 		
 		this->struct_JPEG.struct_DQT.DQT_TableElement = new uint8_t[64 * (this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT + 1)];
 
@@ -2096,16 +2096,16 @@ void ImageProc::Image::f_readDQT(FILE* fp){
 				if((DQT_buffer_length == fread(DQT_buffer, sizeof(DQT_buffer[0]), DQT_buffer_length, fp))){
 	
 						this->struct_JPEG.struct_DQT.DQT_TableElement[j] = (this->struct_JPEG.struct_DQT.DQT_TableElement[j] << 8) + DQT_buffer[0];
-						// printf("DQT_TableElement[%d] = %d\n", j, this->struct_JPEG.struct_DQT.DQT_TableElement[j]);
+//						 printf("DQT_TableElement[%d] = %d\n", j, this->struct_JPEG.struct_DQT.DQT_TableElement[j]);
 	
 				}//end if DQT_Component_ID
 			}//end for DQT_Component_ID
 		
 		}
-		// printf("DQT_Length = %lu\n", this->struct_JPEG.struct_DQT.DQT_Length);
-		// printf("DQT_TableInformation = %lu\n", this->struct_JPEG.struct_DQT.DQT_TableInformation);
-		// printf("DQT_QTID = %lu\n", this->struct_JPEG.struct_DQT.DQT_QTID);
-		// printf("DQT_PrecisionOfQT = %lu\n", this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT);
+//		 printf("DQT_Length = %lu\n", this->struct_JPEG.struct_DQT.DQT_Length);
+//		 printf("DQT_TableInformation = %lu\n", this->struct_JPEG.struct_DQT.DQT_TableInformation);
+//		 printf("DQT_QTID = %lu\n", this->struct_JPEG.struct_DQT.DQT_QTID);
+//		 printf("DQT_PrecisionOfQT = %lu\n", this->struct_JPEG.struct_DQT.DQT_PrecisionOfQT);
 	
 	}
 
@@ -2135,24 +2135,50 @@ void ImageProc::Image::f_readDHT(FILE* fp){
 			}//end if DHT_TableInformation
 		}//end for DHT_TableInformation
 		
-		this->struct_JPEG.struct_DHT.DHT_NumberOfElements = new uint8_t[16];
+		this->struct_JPEG.struct_DHT.DHT_HuffmanTableID = this->struct_JPEG.struct_DHT.DHT_TableInformation & 0x0F;
+		this->struct_JPEG.struct_DHT.DHT_TableClass = (this->struct_JPEG.struct_DHT.DHT_TableInformation & 0xF0) >> 4;
 		
 		for(int j = 0; j < 16; j++){
 			
 			for(int i = 0; i < 1; i++){
 				if((DHT_buffer_length == fread(DHT_buffer, sizeof(DHT_buffer[0]), DHT_buffer_length, fp))){
 
-					this->struct_JPEG.struct_DHT.DHT_NumberOfElements[j] = (this->struct_JPEG.struct_DHT.DHT_NumberOfElements[j] << 8) + DHT_buffer[0];
+					this->struct_JPEG.struct_DHT.DHT_NumberOfCodes[j] = (this->struct_JPEG.struct_DHT.DHT_NumberOfCodes[j] << 8) + DHT_buffer[0];
 					
-					printf("DHT_NumberOfElements[%d] = %d\n", j, this->struct_JPEG.struct_DHT.DHT_NumberOfElements[j]);
+					printf("DHT_NumberOfCodes[%d] = %d\n", j+1, this->struct_JPEG.struct_DHT.DHT_NumberOfCodes[j]);
 					
-				}//end if DHT_NumberOfElements
-			}//end for DHT_NumberOfElements
+				}//end if DHT_NumberOfCodes
+			}//end for DHT_NumberOfCodes
 		
 			
 		}
 		
+		for (uint8_t x = 0; x < 16; x++){
+			this->struct_JPEG.struct_DHT.DHT_TableElement[x] = new uint8_t[this->struct_JPEG.struct_DHT.DHT_NumberOfCodes[x]];
+		}
+		
+		for(int j = 0; j < 16; j++){
+		
+			for(int z = 0; z < this->struct_JPEG.struct_DHT.DHT_NumberOfCodes[j]; z++){
+			
+				for(int i = 0; i < 1; i++){
+					if((DHT_buffer_length == fread(DHT_buffer, sizeof(DHT_buffer[0]), DHT_buffer_length, fp))){
+
+					this->struct_JPEG.struct_DHT.DHT_TableElement[j][z] = (this->struct_JPEG.struct_DHT.DHT_TableElement[j][z] << 8) + DHT_buffer[0];
+				
+					printf("DHT_TableElement[%d][%d] = %d\n", j+1, z, this->struct_JPEG.struct_DHT.DHT_TableElement[j][z]);
+				
+					}//end if DHT_NumberOfElements
+				}//end for DHT_NumberOfElements
+			}//end for DHT_NumberOfElements
+			
+			
+		}	
+		
+		
 		 printf("DHT_Length = %lu\n", this->struct_JPEG.struct_DHT.DHT_Length);
+		 printf("DHT_TableClass = %lu\n", this->struct_JPEG.struct_DHT.DHT_TableClass);
+		 printf("DHT_HuffmanTableID = %lu\n", this->struct_JPEG.struct_DHT.DHT_HuffmanTableID);
 	
 	}
 

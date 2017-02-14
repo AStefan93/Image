@@ -7,20 +7,16 @@ namespace imgintf = ImageProc::CIMGInterface;
 
 int main(int argc, char* argv[]) { 
 
-	char const* image_path2 = argv[1];
-//	char const* image_path2 = "test/lena_baseline_grayscale.jpg";
-//	char const* image_path2 = "test/stitching/IMG_3204.jpg";
-//	char const* image_path2 = "test/JPEG1.jpg";
+	char const* image_path = argv[1];
 	
 	std::clock_t start;
 	double duration;
-
 	start = std::clock();
 	
 //	ImageProc::Image* img = new ImageProc::Image[1];
 //	ImageProc::Image* img2 = new ImageProc::Image[1];
 
-	ImageProc::Image img3(image_path2);
+	ImageProc::Image img3(image_path);
 
 //	imgintf::readImage(img,image_path);
 //	imgintf::readImage(img2,image_path);
@@ -44,13 +40,9 @@ int main(int argc, char* argv[]) {
 //	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(img2));
 //	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(img2));
 
-//	ImageProc::segmentation(img,100);
-
 	duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
 
 	std::cout << "Time: " << duration << '\n';
-
-//	getchar();
 
 	return 0;
 }

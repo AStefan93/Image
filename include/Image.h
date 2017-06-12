@@ -1,3 +1,6 @@
+//include guard
+#ifndef IMAGE_HEADER
+#define IMAGE_HEADER
 //Standard libs
 #include <iostream> //basic io
 #include <string> //strings
@@ -8,18 +11,15 @@
 #include <algorithm>    // std::sort
 #include <stdint.h> //used for types(uint8_t, uint16_t etc)
 
-//external libs
-#include "CImg.h"
-
-//internal libs
+//internal type header
 #include "Image_types.h"
 
-//added for time 
+//added for time calculation
 #include <ctime>
 #include <cstdio>
 
 //DEFINES
-#define is_bigendian() ( (*(char*)&c_uint16_endian_test) == 0 ) // returns 1 if paltform is little_endian
+#define is_bigendian() ( (*(char*)&c_uint16_endian_test) == 0 ) // returns 1 if platform is little_endian
 
 namespace ImageProc {
 
@@ -64,49 +64,7 @@ namespace ImageProc {
 
 	};
 
-	//class JPEG: public Image {
-
-	//	private:
-	//		t_JPEG struct_JPEG;
-
-	//		void f_readAPP0(FILE* );
-	//};
-
-	const double pi = std::acos(-1); // PI
-
-	int mirrorVertical(Image* ); //mirrors an image by the vertical axis
-	int mirrorHorizontal(Image* ); //mirors an image by the horizontal axis
-	int computeHistogram(Image* ); //computes the histogram of a grayscale image
-	int equalizeHistogramRemap(Image* ); //already computes histogram
-	int equalizeHistogramCumulative(Image* ); //better than HistogramRemap
-	int rotate(Image* ,float ); //input angle
-	int computeGrayLevel(Image* );
-
-	int average_filter(Image* ,int ,int ); //image object, windowSize, extra parameter for edge preserving
-	int average_filter_color_normal(Image* ,int ,int ,int); //image object, windowSize, extra parameter for edge preserving, channel number (red,green or blue)
-	//the sqrt average filter computes the sqrt of the average of the squares for each pixel
-	int average_filter_color_sqrt(Image*,int ,int ,int); //image object, windowSize, extra parameter for edge preserving, channel number (red,green or blue)
-	int gaussian_filter(Image* ,int ); //image object, sigma
-	int bilateral_filterGray(Image* ,int ); //image object, sigma
-	int bilateral_filterColor(Image* ,int ,int ); //image object, sigma, channel
-	int guided_filter(Image* ,Image* ,int );
-	int impulse_filter(Image* ,int ); //image object, window size
-	int sobel(Image* ,Image* ); //input image and output image
-	int sobel(Image* ); //input image only overload - sobel image saved into input
-	int canny(Image* ,int );
-	int unsharp_masking(Image* ,Image* );
-	int stitch(Image* ,Image* );
-
-	int segmentation(Image*,unsigned char);
-
-	namespace CIMGInterface{
-
-		int readImage(ImageProc::Image* ,char const*); //transforms imageread into Image object
-		cimg_library::CImg<unsigned char> displayImageGray(ImageProc::Image* ); //take Image obj and returns CImg object
-		cimg_library::CImg<unsigned char> displayImageColor(ImageProc::Image* ); //take Image obj and returns CImg object
-		cimg_library::CImg<unsigned char> displayHist(ImageProc::Image* ); //take Image obj and returns CImg object - histogram
-
-	}
+}
 
 	namespace MachineLearning{
 
@@ -126,5 +84,5 @@ namespace ImageProc {
 
 
 	}
-
-}
+//end include guard
+#endif

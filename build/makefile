@@ -4,9 +4,9 @@ EXECUTABLE = ../image
 ODIR = obj
 SDIR = ../src
 IDIR =../include
-_DEPS = Image.h
+_DEPS = ImageProc.h Image.h CImg_wrapper.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
-_OBJ = main.o Image.o
+_OBJ = main.o ImageProc.o Image.o CImg_wrapper.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)

@@ -1,3 +1,7 @@
+//include guard
+#ifndef IMAGE_TYPES_H
+#define IMAGE_TYPES_H
+
 typedef unsigned char uint8;
 typedef unsigned short int uint16;
 typedef unsigned int uint32;
@@ -92,3 +96,5 @@ typedef struct t_JPEG_tag{
 	
 }t_JPEG;
 
+//end include guard
+#endif

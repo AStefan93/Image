@@ -806,12 +806,74 @@ void ImageProc::Image::f_readDHT(FILE* fp){
 		}	
 		
 		
-		 printf("DHT_Length = %lu\n", this->struct_JPEG.struct_DHT.DHT_Length);
-		 printf("DHT_TableClass = %lu\n", this->struct_JPEG.struct_DHT.DHT_TableClass);
-		 printf("DHT_HuffmanTableID = %lu\n", this->struct_JPEG.struct_DHT.DHT_HuffmanTableID);
+		 printf("DHT_Length = %d\n", this->struct_JPEG.struct_DHT.DHT_Length);
+		 printf("DHT_TableClass = %d\n", this->struct_JPEG.struct_DHT.DHT_TableClass);
+		 printf("DHT_HuffmanTableID = %d\n", this->struct_JPEG.struct_DHT.DHT_HuffmanTableID);
 	
 	}
 
+}
+
+//Square
+ImageProc::Square::Square(){
+	
+	this->upperRightCorner.x = 0;
+	this->upperRightCorner.y = 0;
+	this->lowerLeftCorner.x = 0;
+	this->lowerLeftCorner.y = 0;
+	
+	//insert warning message
+}
+
+ImageProc::Square::Square(t_2DPoint* uRCorner, t_2DPoint* lLCorner){
+	
+	if((uRCorner->x <= lLCorner->x) && (uRCorner->y <= lLCorner->y)){
+	
+		this->upperRightCorner.x = uRCorner->x;
+		this->upperRightCorner.y = uRCorner->y;
+		this->lowerLeftCorner.x = lLCorner->x;
+		this->lowerLeftCorner.y = lLCorner->y;
+		
+	}else{
+		
+		this->upperRightCorner.x = 0;
+		this->upperRightCorner.y = 0;
+		this->lowerLeftCorner.x = 0;
+		this->lowerLeftCorner.y = 0;
+		//insert warning message
+			
+	}
+}
+
+t_2DPoint ImageProc::Square::getUpperRightCorner(){
+	
+	return this->upperRightCorner;
+	
+}
+
+t_2DPoint ImageProc::Square::getLowerLeftCorner(){
+	
+	return this->lowerLeftCorner;
+	
+}
+
+void ImageProc::Square::setUpperRightCorner(t_2DPoint* corner){
+	
+	this->upperRightCorner.x = corner->x;
+	this->upperRightCorner.y = corner->y;
+	
+}
+
+void ImageProc::Square::setLowerLeftCorner(t_2DPoint* corner){
+	
+	this->lowerLeftCorner.x = corner->x;
+	this->lowerLeftCorner.y = corner->y;
+	
+}
+
+ImageProc::Square::~Square(){
+	
+	//insert warning message
 }
 
 

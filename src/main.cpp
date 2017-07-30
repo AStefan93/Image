@@ -17,9 +17,19 @@ int main(int argc, char* argv[]) {
 	ImageProc::Image* img2 = new ImageProc::Image[1];
 //	ImageProc::Image* img3 = new ImageProc::Image[1];
 
+	t_2DPoint* uRC = new t_2DPoint[1];
+	t_2DPoint* lLC = new t_2DPoint[1];
+	
+	uRC->x = 20;
+	uRC->y = 20;
+	lLC->x = 40;
+	lLC->y = 40;
+	ImageProc::Square ROI(uRC,lLC);
+
 //	ImageProc::Image img3(image_path);
 	imgintf::readImage(img,image_path);
-	imgintf::readImage(img2,image_path);
+	ImageProc::crop(img,img2,ROI);
+//	imgintf::readImage(img2,image_path);
 //	imgintf::readImage(img3,image_path);
 //	ImageProc::gaussian_filter(img,3);
 //	ImageProc::rotate(img,30);
@@ -34,14 +44,14 @@ int main(int argc, char* argv[]) {
 //	ImageProc::equalizeHistogramRemap(img3);
 //	ImageProc::sobel(img,img2);
 
-	ImageProc::computeHistogram(img);
-	ImageProc::computeHistogram(img2);
+//	ImageProc::computeHistogram(img);
+//	ImageProc::computeHistogram(img2);
 //	ImageProc::computeHistogram(img3);
 
-	cimg_library::CImgDisplay init_disp(imgintf::displayImageGray(img));
-	cimg_library::CImgDisplay init2_disp(imgintf::displayHist(img));
-	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(img2));
-	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(img2));
+//	cimg_library::CImgDisplay init_disp(imgintf::displayImageGray(img));
+//	cimg_library::CImgDisplay init2_disp(imgintf::displayHist(img));
+//	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(img2));
+//	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(img2));
 //	cimg_library::CImgDisplay init5_disp(imgintf::displayImageGray(img3));
 //	cimg_library::CImgDisplay init6_disp(imgintf::displayHist(img3));
 	
@@ -50,9 +60,12 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "Time: " << duration << '\n';
 
-	while (!init_disp.is_closed() && !init2_disp.is_closed()) {
-    		init_disp.wait();
-	}
+//	while (!init_disp.is_closed() && !init2_disp.is_closed()) {
+//    		init_disp.wait();
+//	}
 	
+
+	delete uRC;
+	delete lLC;
 	return 0;
 }

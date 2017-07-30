@@ -2,6 +2,8 @@
 #ifndef IMAGE_TYPES_H
 #define IMAGE_TYPES_H
 
+#include <stdint.h> //used for types(uint8_t, uint16_t etc)
+
 typedef unsigned char uint8;
 typedef unsigned short int uint16;
 typedef unsigned int uint32;
@@ -95,6 +97,13 @@ typedef struct t_JPEG_tag{
 	t_DHT struct_DHT;
 	
 }t_JPEG;
+
+typedef struct t_2DPointTag{
+	
+	uint16 x;
+	uint16 y;
+	
+}t_2DPoint;
 
 //end include guard
 #endif

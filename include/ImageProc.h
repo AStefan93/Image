@@ -31,7 +31,9 @@ namespace ImageProc {
 	int stitch(Image* ,Image* );
 
 	int segmentation(Image*,unsigned char);
-
+	//cropping function
+	//takes as input the input image, the output image and the square to which it will be cropped
+	void crop(Image* ,Image* ,Square );
 }
 
 #endif

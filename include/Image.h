@@ -6,13 +6,13 @@
 #include <string> //strings
 #include <fstream> //basic file io
 //#include <conio.h> //getch()
-#include <math.h> //sine, cosine
 #include <random> //for generating population - genetic algorithm
 #include <algorithm>    // std::sort
-#include <stdint.h> //used for types(uint8_t, uint16_t etc)
 
 //internal type header
 #include "Image_types.h"
+//math functions
+#include "Image_math.h"
 
 //added for time calculation
 #include <ctime>
@@ -36,7 +36,7 @@ namespace ImageProc {
 		unsigned int getgrayLevel(); //the number of gray levels
 		unsigned int setgrayLevel(int); //sets the gray level
 		std::string getType(); //gets the type
-		unsigned int** imageData; //the stored image pixels
+		unsigned int** imageData; //the stored gray image pixels
 		unsigned int** Red;
 		unsigned int** Green;
 		unsigned int** Blue;
@@ -62,6 +62,20 @@ namespace ImageProc {
 		void f_readDQT(FILE* );
 		void f_readDHT(FILE* );
 
+	};
+	
+	class Square {
+		public:
+			Square();
+			Square(t_2DPoint* , t_2DPoint* );
+			~Square();
+			t_2DPoint getUpperRightCorner();
+			void setUpperRightCorner(t_2DPoint* ); 
+			t_2DPoint getLowerLeftCorner();
+			void setLowerLeftCorner(t_2DPoint* );
+		private:
+			t_2DPoint upperRightCorner;
+			t_2DPoint lowerLeftCorner;
 	};
 
 }

@@ -1371,3 +1371,25 @@ int ImageProc::stitch(Image* img1,Image* img2){
 
 	return 0;
 }
+
+//The function "crop" crops the input image 'img' and copies the result to 'croppedImg'
+//requires as input the coordinates of the upper right corner and lower left corner of the crop square
+void ImageProc::crop(Image* img, Image* croppedImg, ImageProc::Square cropRegion){
+	
+	uint16 Height = img->getHeight();
+	uint16 Width = img->getWidth();
+	t_2DPoint uRC = cropRegion.getUpperRightCorner();
+	t_2DPoint lLC = cropRegion.getLowerLeftCorner();
+	
+	if((Height >= uRC.x) && (Width >= uRC.y) && (Height <= lLC.x) && (Width <= lLC.y)){
+	
+		for(uint16 h = uRC.x; (h <= Height) && (h <= lLC.x); h++){
+			for(uint16 w = uRC.y; (w <= Width) && (w <= lLC.y); w++){
+			
+				croppedImg->imageData[h - uRC.x][w - uRC.y] = img->imageData[h][w];
+				
+			}
+		}
+	
+	}
+}

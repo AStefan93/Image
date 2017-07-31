@@ -8,27 +8,35 @@ namespace imgintf = CIMGInterface;
 int main(int argc, char* argv[]) { 
 
 	char const* image_path = argv[1];
+	char const* image_path2 = argv[2];
 	
 	std::clock_t start;
 	double duration;
 	start = std::clock();
 	
 	ImageProc::Image* img = new ImageProc::Image[1];
-	ImageProc::Image* img2 = new ImageProc::Image[1];
+//	ImageProc::Image* img2 = new ImageProc::Image[1];
 //	ImageProc::Image* img3 = new ImageProc::Image[1];
 
-	t_2DPoint* uRC = new t_2DPoint[1];
-	t_2DPoint* lLC = new t_2DPoint[1];
+	t_2DPoint* uLC = new t_2DPoint[1];
+	t_2DPoint* lRC = new t_2DPoint[1];
 	
-	uRC->x = 20;
-	uRC->y = 20;
-	lLC->x = 40;
-	lLC->y = 40;
-	ImageProc::Square ROI(uRC,lLC);
-
-//	ImageProc::Image img3(image_path);
 	imgintf::readImage(img,image_path);
+		
+	uLC->x = img->getHeight()/2;
+	uLC->y = 0;
+	lRC->x = img->getHeight();
+	lRC->y = img->getWidth();
+	ImageProc::Square ROI(uLC,lRC);
+	
+	ImageProc::Image* img2 = new ImageProc::Image(lRC->x - uLC->x,lRC->y - uLC->y);
+	
+//	ImageProc::Image img3(image_path);
+
 	ImageProc::crop(img,img2,ROI);
+	ImageProc::sobel(img2);
+	
+	imgintf::saveImageGray(img2,image_path2);
 //	imgintf::readImage(img2,image_path);
 //	imgintf::readImage(img3,image_path);
 //	ImageProc::gaussian_filter(img,3);
@@ -65,7 +73,7 @@ int main(int argc, char* argv[]) {
 //	}
 	
 
-	delete uRC;
-	delete lLC;
+//	delete uRC;
+//	delete lLC;
 	return 0;
 }

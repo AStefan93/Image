@@ -69,13 +69,13 @@ namespace ImageProc {
 			Square();
 			Square(t_2DPoint* , t_2DPoint* );
 			~Square();
-			t_2DPoint getUpperRightCorner();
-			void setUpperRightCorner(t_2DPoint* ); 
-			t_2DPoint getLowerLeftCorner();
-			void setLowerLeftCorner(t_2DPoint* );
+			t_2DPoint getUpperLeftCorner();
+			void setUpperLeftCorner(t_2DPoint* ); 
+			t_2DPoint getLowerRightCorner();
+			void setLowerRightCorner(t_2DPoint* );
 		private:
-			t_2DPoint upperRightCorner;
-			t_2DPoint lowerLeftCorner;
+			t_2DPoint upperLeftCorner;
+			t_2DPoint lowerRightCorner;
 	};
 
 }

@@ -132,3 +132,25 @@ cimg_library::CImg<unsigned char> CIMGInterface::displayHist(ImageProc::Image* i
 	return histogram;
 }
 
+cimg_library::CImg<unsigned char> CIMGInterface::saveImageGray(ImageProc::Image* img,char const* imgPath){
+
+	//display Image object
+
+	int Height = img->getHeight();
+	int Width = img->getWidth();
+
+	cimg_library::CImg<unsigned char> image(Width,Height,1,1);
+
+	for (int H = 0; H < Height; H++) {
+		for (int W = 0; W < Width; W++) {
+
+			image(W,H,0,0) = img->imageData[H][W];
+
+		}
+	}
+	
+	image.save(imgPath);
+
+	return image;
+}
+

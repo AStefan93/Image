@@ -13,7 +13,7 @@ namespace CIMGInterface{
 	cimg_library::CImg<unsigned char> displayImageGray(ImageProc::Image* ); //take Image obj and returns CImg object
 	cimg_library::CImg<unsigned char> displayImageColor(ImageProc::Image* ); //take Image obj and returns CImg object
 	cimg_library::CImg<unsigned char> displayHist(ImageProc::Image* ); //take Image obj and returns CImg object - histogram
-
+	cimg_library::CImg<unsigned char> saveImageGray(ImageProc::Image* img,char const* );
 }
 
 //end include guard

@@ -1378,18 +1378,17 @@ void ImageProc::crop(Image* img, Image* croppedImg, ImageProc::Square cropRegion
 	
 	uint16 Height = img->getHeight();
 	uint16 Width = img->getWidth();
-	t_2DPoint uRC = cropRegion.getUpperRightCorner();
-	t_2DPoint lLC = cropRegion.getLowerLeftCorner();
+	t_2DPoint uLC = cropRegion.getUpperLeftCorner();
+	t_2DPoint lRC = cropRegion.getLowerRightCorner();
 	
-	if((Height >= uRC.x) && (Width >= uRC.y) && (Height <= lLC.x) && (Width <= lLC.y)){
-	
-		for(uint16 h = uRC.x; (h <= Height) && (h <= lLC.x); h++){
-			for(uint16 w = uRC.y; (w <= Width) && (w <= lLC.y); w++){
+	if((Height >= (lRC.x - uLC.x)) && (Width >= (lRC.y - uLC.y)) && (Height >= lRC.x) && (Width >= lRC.y)){
+		for(uint16 h = uLC.x; (h <= Height) && (h < lRC.x); h++){
+			for(uint16 w = uLC.y; (w <= Width) && (w < lRC.y); w++){
 			
-				croppedImg->imageData[h - uRC.x][w - uRC.y] = img->imageData[h][w];
+				croppedImg->imageData[h - uLC.x][w - uLC.y] = img->imageData[h][w];
 				
 			}
 		}
-	
 	}
+	
 }

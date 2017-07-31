@@ -817,57 +817,57 @@ void ImageProc::Image::f_readDHT(FILE* fp){
 //Square
 ImageProc::Square::Square(){
 	
-	this->upperRightCorner.x = 0;
-	this->upperRightCorner.y = 0;
-	this->lowerLeftCorner.x = 0;
-	this->lowerLeftCorner.y = 0;
+	this->upperLeftCorner.x = 0;
+	this->upperLeftCorner.y = 0;
+	this->lowerRightCorner.x = 0;
+	this->lowerRightCorner.y = 0;
 	
 	//insert warning message
 }
 
-ImageProc::Square::Square(t_2DPoint* uRCorner, t_2DPoint* lLCorner){
+ImageProc::Square::Square(t_2DPoint* uLCorner, t_2DPoint* lRCorner){
 	
-	if((uRCorner->x <= lLCorner->x) && (uRCorner->y <= lLCorner->y)){
+	if((uLCorner->x <= lRCorner->x) && (uLCorner->y <= lRCorner->y)){
 	
-		this->upperRightCorner.x = uRCorner->x;
-		this->upperRightCorner.y = uRCorner->y;
-		this->lowerLeftCorner.x = lLCorner->x;
-		this->lowerLeftCorner.y = lLCorner->y;
+		this->upperLeftCorner.x = uLCorner->x;
+		this->upperLeftCorner.y = uLCorner->y;
+		this->lowerRightCorner.x = lRCorner->x;
+		this->lowerRightCorner.y = lRCorner->y;
 		
 	}else{
 		
-		this->upperRightCorner.x = 0;
-		this->upperRightCorner.y = 0;
-		this->lowerLeftCorner.x = 0;
-		this->lowerLeftCorner.y = 0;
+		this->upperLeftCorner.x = 0;
+		this->upperLeftCorner.y = 0;
+		this->lowerRightCorner.x = 0;
+		this->lowerRightCorner.y = 0;
 		//insert warning message
 			
 	}
 }
 
-t_2DPoint ImageProc::Square::getUpperRightCorner(){
+t_2DPoint ImageProc::Square::getUpperLeftCorner(){
 	
-	return this->upperRightCorner;
-	
-}
-
-t_2DPoint ImageProc::Square::getLowerLeftCorner(){
-	
-	return this->lowerLeftCorner;
+	return this->upperLeftCorner;
 	
 }
 
-void ImageProc::Square::setUpperRightCorner(t_2DPoint* corner){
+t_2DPoint ImageProc::Square::getLowerRightCorner(){
 	
-	this->upperRightCorner.x = corner->x;
-	this->upperRightCorner.y = corner->y;
+	return this->lowerRightCorner;
 	
 }
 
-void ImageProc::Square::setLowerLeftCorner(t_2DPoint* corner){
+void ImageProc::Square::setUpperLeftCorner(t_2DPoint* corner){
 	
-	this->lowerLeftCorner.x = corner->x;
-	this->lowerLeftCorner.y = corner->y;
+	this->upperLeftCorner.x = corner->x;
+	this->upperLeftCorner.y = corner->y;
+	
+}
+
+void ImageProc::Square::setLowerRightCorner(t_2DPoint* corner){
+	
+	this->lowerRightCorner.x = corner->x;
+	this->lowerRightCorner.y = corner->y;
 	
 }
 

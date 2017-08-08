@@ -1392,3 +1392,4 @@ void ImageProc::crop(Image* img, Image* croppedImg, ImageProc::Square cropRegion
 	}
 	
 }
+

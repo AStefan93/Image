@@ -73,4 +73,20 @@ uint32* p_uint32_relFreq(uint8* abs_freq_array, uint32* symbolP_array, uint8 sym
     
     return symbolP_array;
 }
-
+//generates the huffman dictionary
+//the 3rd parameter represents the length of the symbol_array
+//the 2nd parameter is the output of the function, the dictionary
+void v_genHuffmanDict(uint8* symbol_array, uint8* huffmanDict, uint8 array_size){
+    
+    p_uint32_absFreq(symbol_array, abs_freq_array, array_size);
+    p_uint32_relFreq(abs_freq_array, symbolP_array, symbolP_array_size, totalNumber);
+    
+    //map symbols with relative frequencies
+    
+    //order symbols ascending by frequency
+    
+    //generate huffman tree
+    
+    //generate huffman dictionary based on tree
+    
+}

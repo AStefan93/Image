@@ -1270,7 +1270,7 @@ int ImageProc::unsharp_masking_test(Image* img,Image* img2){
 	return 0;
 }
 
-int ImageProc::segmentation(Image* img,unsigned char populationSize){
+int ImageProc::test_segmentation(Image* img,unsigned char populationSize){
 
 	//1 generate population
 		//randomise 50 sigmas and 50 mius
@@ -1392,4 +1392,6 @@ void ImageProc::crop(Image* img, Image* croppedImg, ImageProc::Square cropRegion
 	}
 	
 }
+
+//
 

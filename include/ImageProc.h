@@ -30,10 +30,12 @@ namespace ImageProc {
 	int unsharp_masking_test(Image* ,Image* );
 	int stitch(Image* ,Image* );
 
-	int segmentation(Image*,unsigned char);
+	int test_segmentation(Image*,unsigned char);
 	//cropping function
 	//takes as input the input image, the output image and the square to which it will be cropped
 	void crop(Image* ,Image* ,Square );
+	//segments a gray image into 2 gray levels - black and white
+	void binary_segmentation(Image* );
 }
 
 #endif

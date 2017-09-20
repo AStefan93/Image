@@ -21,6 +21,9 @@ namespace Math {
     void v_HuffmanEncode(uint8* , uint8* );
     //decode 1D symbol vector with huffman dictionary
     void v_HuffmanDecode(uint8* , uint8* );
+    
+    void v_cumulativeMeans();
+    void v_cumulativeSums();
 
 }
 

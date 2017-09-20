@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -I$(IDIR) -lpthread -lX11
+CFLAGS = -std=c++11 -I$(IDIR) -lpthread -lX11 -lpng -ljpeg
 EXECUTABLE = ../image
 ODIR = obj
 SDIR = ../src

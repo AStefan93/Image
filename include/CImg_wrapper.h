@@ -2,6 +2,7 @@
 #ifndef CIMG_WRAPPER_H
 #define CIMG_WRAPPER_H
 
+#define cimg_use_png
 //include external header
 #include "CImg.h"
 #include "Image.h"

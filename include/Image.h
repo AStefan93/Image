@@ -18,6 +18,9 @@
 #include <ctime>
 #include <cstdio>
 
+#define cimg_use_png //it won't work with png files otherwise
+#include "CImg.h" //external CImg header
+
 //DEFINES
 #define is_bigendian() ( (*(char*)&c_uint16_endian_test) == 0 ) // returns 1 if platform is little_endian
 
@@ -27,6 +30,7 @@ namespace ImageProc {
 	public:
 		Image(); //default contructor - 240*320 matrix with zeroes
 		Image(unsigned int ,unsigned int); //creates H*W matrix with zeroes
+		Image(char const* ,uint8 ); //reads header and data from path file image - personal JPEG decoder
 		Image(char const* ); //reads header and data from path file image
 		~Image(); //deletes image
 		unsigned int getHeight();//Height function
@@ -41,6 +45,8 @@ namespace ImageProc {
 		unsigned int** Green;
 		unsigned int** Blue;
 		double* Hist; //vector for the histogram
+		double* normHist; //vector for the normalized histogram
+		uint8 bitDepth; //the bit depth of the image - by default it's 8
 
 //		int readPGM(char* ); //reads file into image
 //		int writePGM(char* ); //writes image to file

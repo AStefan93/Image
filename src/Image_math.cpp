@@ -90,3 +90,12 @@ void v_genHuffmanDict(uint8* symbol_array, uint8* huffmanDict, uint8 array_size)
     //generate huffman dictionary based on tree
     
 }
+
+
+void v_cumulativeSums(){
+
+}
+void v_cumulativeMeans(){
+
+}
+

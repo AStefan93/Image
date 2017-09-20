@@ -10,6 +10,7 @@ namespace ImageProc {
 	int mirrorVertical(Image* ); //mirrors an image by the vertical axis
 	int mirrorHorizontal(Image* ); //mirors an image by the horizontal axis
 	int computeHistogram(Image* ); //computes the histogram of a grayscale image
+	void v_computeNormalizedHistogram(Image* ); //computes the normalized histogram of a grayscale image
 	int equalizeHistogramRemap(Image* ); //already computes histogram
 	int equalizeHistogramCumulative(Image* ); //better than HistogramRemap
 	int rotate(Image* ,float ); //input angle

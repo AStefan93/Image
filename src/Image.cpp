@@ -17,7 +17,78 @@ ImageProc::Image::Image() {
 
 }
 
-ImageProc::Image::Image(char const* fileName) {
+ImageProc::Image::Image(char const* imgPath) {
+
+	//read into Image object
+	
+	this->imgType = "Read from file";
+
+	double R = 0.2126;
+	double G = 0.7152;
+	double B = 0.0722;
+
+	cimg_library::CImg<unsigned char> image(imgPath);
+
+	setHeight(image.height());
+	setWidth(image.width());
+	int Height = getHeight();
+	int Width = getWidth();
+
+	//allocate memory
+	imageData = new unsigned int*[Height];
+	for (int H = 0; H < Height; H++)
+		imageData[H] = new unsigned int[Width];
+
+	Red = new unsigned int*[Height];
+	for (int i = 0; i < Height; i++)
+		Red[i] = new unsigned int[Width];
+
+	Green = new unsigned int*[Height];
+	for (int i = 0; i < Height; i++)
+		Green[i] = new unsigned int[Width];
+
+	Blue = new unsigned int*[Height];
+	for (int i = 0; i < Height; i++)
+		Blue[i] = new unsigned int[Width];
+
+	for (int H = 0; H < Height; H++) {
+		for (int W = 0; W < Width; W++) {
+
+			Red[H][W] = image(W,H,0,0);
+			Green[H][W] = image(W,H,0,1);
+			Blue[H][W] = image(W,H,0,2);
+			imageData[H][W] = (unsigned int)(R*image(W,H,0,0) + G*image(W,H,0,1) + B*image(W,H,0,2));
+
+		}
+	}
+
+	unsigned int temp = 0;
+	setgrayLevel(temp); // initialize graylevel to 0
+	for(unsigned int H = 0; H < getHeight(); H++){
+		for(unsigned int W = 0; W < getWidth(); W++){
+
+			if(imageData[H][W] > temp){
+				temp = imageData[H][W];
+				setgrayLevel(temp); //set new graylevel
+
+			}
+		}
+	}
+	
+	this->Hist = new double[256]; //allocate memory for histogram vector
+	this->normHist = new double[256]; //allocate memory for histogram vector
+	
+	for(int i = 0; i < 256; i++) //8 bit depth gray scale image
+		Hist[i] = 0; //initialize vector with zeroes;
+	
+	for(int i = 0; i < 256; i++) //8 bit depth gray scale image
+		normHist[i] = 0; //initialize vector with zeroes;
+		
+	Image_count += 1;
+
+}
+
+ImageProc::Image::Image(char const* fileName,uint8 x) {
 
 	FILE *fp;
 	fp = fopen(fileName, "rb");
@@ -449,6 +520,7 @@ ImageProc::Image::~Image() {
 		delete[] this->Blue;
 
 		delete[] this->Hist;
+		delete[] this->normHist;
 		
 		this->Image_count -= 1;
 

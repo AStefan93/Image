@@ -33,7 +33,7 @@ int ImageProc::mirrorHorizontal(Image* img) {
 
 int ImageProc::computeHistogram(Image* img){
 
-	for(int i = 0; i < 256; i++)
+	for(int i = 0; i < 256; i++) //8 bit depth gray scale image
 		img->Hist[i] = 0; //initialize vector with zeroes;
 
 
@@ -45,15 +45,23 @@ int ImageProc::computeHistogram(Image* img){
 		}
 	}
 
-	/*for(int i = 0; i < img->getHeight(); i++){
+	return 0;
+}
+
+void ImageProc::v_computeNormalizedHistogram(Image* img){
+
+	ImageProc::computeHistogram(img);
+	
+	for(int i = 0; i < 256; i++) //8 bit depth gray scale image
+		img->normHist[i] = 0; //initialize vector with zeroes;
+	
+	for(int i = 0; i < img->getHeight(); i++){
 		for(int j = 0; j < img->getWidth(); j++){
 
-			img->Hist[img->imageData[i][j]] = img->Hist[img->imageData[i][j]]/(img->getHeight()*img->getWidth()) ;
+			img->normHist[img->imageData[i][j]] = img->Hist[img->imageData[i][j]]/(img->getHeight()*img->getWidth());
 			
 		}
-	}*/
-
-	return 0;
+	}
 }
 
 int ImageProc::equalizeHistogramRemap(Image* img){
@@ -64,7 +72,7 @@ int ImageProc::equalizeHistogramRemap(Image* img){
 
 	ImageProc::computeHistogram(img);
 
-	for(unsigned int i = 0; i < img->getgrayLevel(); i++){
+	for(unsigned int i = 0; i <= img->getgrayLevel(); i++){
 			if((img->Hist[i] !=0) && (img->Hist[i-1] == 0) && min == 0)
 				min = i;
 	}
@@ -1393,5 +1401,19 @@ void ImageProc::crop(Image* img, Image* croppedImg, ImageProc::Square cropRegion
 	
 }
 
-//
+//This function should perform a binary segmentation of a gray image - prefferably, the input should be the output of an edge detector algorithm (like sobel)
+//void ImageProc::otsu_binary_segmentation(Image* img){
+
+	 
+
+//}
+
+//This function should calculate the image bit-depth 
+//uint8 computeGrayLevel(Image* img){
+	
+	
+	
+//return bit_depth;
+//}
+
 

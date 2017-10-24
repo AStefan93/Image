@@ -185,6 +185,321 @@ int ImageProc::rotate(Image* img, float theta){
 	return 0;
 }
 
+int ImageProc::rotBlnInt(Image* img, float theta){
+
+	unsigned int** tempImage;
+	unsigned int x_prime;
+	unsigned int y_prime;
+	uint8_t clrTopLeft;
+	uint8_t clrBottomLeft;
+	uint8_t clrTopRight;
+	uint8_t clrBottomRight;
+	double fDistance; //distance from pixel to center of image in Cartesian system
+	double fPolarAngle; //angle of the vector of the pixel in Cartesian system
+	int32_t x_c; //horizontal coordonate relative to selected center. IT CAN BE NEGATIVE
+	int32_t y_c; // vertical coordonate relative to selected center. IT CAN BE NEGATIVE
+	double fTrueX;
+	double fTrueY;
+	uint32_t iFloorX;
+	uint32_t iFloorY;
+	uint32_t iCeilingX;
+	uint32_t iCeilingY;
+	double fDeltaX;
+	double fDeltaY;
+	double fTop;
+	double fBottom;
+	uint8_t iPixel;
+
+	uint32_t H = img->getHeight();
+	uint32_t W = img->getWidth();
+
+	double rad = - theta * Image_PI / 180; //convert degrees to rad - the minus is added to rotate clockwise
+
+	tempImage = new unsigned int*[H];
+	for (unsigned int i = 0; i < H; i++)
+		tempImage[i] = new unsigned int[W];
+	for (unsigned int i = 0; i < H; i++)
+		for(unsigned int j = 0; j < W; j++)
+			tempImage[i][j] = 0; //initialise matrix with zeroes
+
+	for(unsigned int i = 0; i < H; i++){
+		for(unsigned int j = 0; j < W; j++){
+
+			//convert to Cartesian system
+			x_c = j - (W)/2;
+			y_c = (H)/2 - i;
+			
+			//convert Cartesian to Polar
+			fDistance = std::sqrt(x_c * x_c + y_c * y_c);
+        		fPolarAngle = 0.0;   		
+        		if (x_c == 0)
+			{
+			    if (y_c == 0)
+			    {
+				// centre of image, no rotation needed
+				tempImage[i][j] = img->imageData[i][j];
+				continue;
+			    }
+			    else if (y_c < 0)
+			    {
+				fPolarAngle = 1.5 * Image_PI;// 3/2 * PI
+			    }
+			    else
+			    {
+				fPolarAngle = 0.5 * Image_PI; // 1/2 * PI
+			    }
+			}
+			else
+			{
+			    fPolarAngle = std::atan2((double)y_c, (double)x_c);
+			}		
+			// the crucial rotation part
+			// "reverse" rotate, so minus instead of plus
+			fPolarAngle -= rad;
+
+			// convert polar to Cartesian
+      			fTrueX = fDistance * std::cos(fPolarAngle);
+     			fTrueY = fDistance * std::sin(fPolarAngle);
+
+			// convert Cartesian to raster
+        		fTrueX = fTrueX + (double)(W)/2;
+        		fTrueY = (double)(H)/2 - fTrueY;
+	
+			iFloorX = (int)(std::floor(fTrueX));
+        		iFloorY = (int)(std::floor(fTrueY));
+        		iCeilingX = (int)(std::ceil(fTrueX));
+        		iCeilingY = (int)(std::ceil(fTrueY));
+        		
+        		// check bounds
+        		if (iFloorX < 0 || iCeilingX < 0 || iFloorX >= W || iCeilingX >= W || iFloorY < 0 || iCeilingY < 0 || iFloorY >= H || iCeilingY >= H) 				continue;
+        		fDeltaX = fTrueX - (double)iFloorX;
+        		fDeltaY = fTrueY - (double)iFloorY;
+
+        		clrTopLeft = img->imageData[iFloorY][iFloorX];
+        		clrTopRight = img->imageData[iFloorY][iCeilingX];
+        		clrBottomLeft = img->imageData[iCeilingY][iFloorX];
+        		clrBottomRight = img->imageData[iCeilingY][iCeilingX];
+        				
+        		// linearly interpolate horizontally between top neighbours
+        		fTop = (1 - fDeltaX) * clrTopLeft + fDeltaX * clrTopRight;
+        		
+        		// linearly interpolate horizontally between bottom neighbours
+        		fBottom = (1 - fDeltaX) * clrBottomLeft + fDeltaX * clrBottomRight;
+        		
+        		// linearly interpolate vertically between top and bottom interpolated results
+        		iPixel = (uint8_t)(std::round((1 - fDeltaY) * fTop + fDeltaY * fBottom));
+        		
+        		// make sure colour values are valid
+        		if (iPixel < 0) iPixel = 0;
+        		if (iPixel > 255) iPixel = 255;	
+        		tempImage[i][j] = iPixel;
+
+		}
+	}
+
+	for(unsigned int i = 0; i < H; i++){
+		for(unsigned int j = 0; j < W; j++){
+
+			img->imageData[i][j] = tempImage[i][j];
+
+		}
+	}
+	
+	if(tempImage){
+		for (unsigned int i = 0; i < H; i++)
+			delete[] tempImage[i];
+		delete[] tempImage;
+	}
+	
+	return 0;
+}
+
+ImageProc::Image ImageProc::img_rotBlnInt_test(Image* img, float theta){
+
+	unsigned int x_prime;
+	unsigned int y_prime;
+	int32_t x_c; // horizontal coordonate relative to selected center. IT CAN BE NEGATIVE
+	int32_t y_c; // vertical coordonate relative to selected center. IT CAN BE NEGATIVE
+
+	uint32_t H = img->getHeight();
+	uint32_t W = img->getWidth();
+
+	double rad = - theta * Image_PI / 180; //convert degrees to rad - the minus is added to rotate clockwise
+	
+	uint16_t size_x;
+	uint16_t size_y;
+	size_x = std::ceil(H*std::abs(std::cos(rad)) + W*std::abs(std::sin(rad)));
+	size_y = std::ceil(H*std::abs(std::sin(rad)) + W*std::abs(std::cos(rad)));
+	
+	ImageProc::Image tempImage(size_x,size_y);
+	
+	//calculate displacement between images
+	uint16_t displacementX;
+	uint16_t displacementY;
+	displacementX = size_x/2 - H/2;
+	displacementY = size_y/2 - W/2;
+
+	//rotation
+	for(unsigned int i = 0; i < H; i++){
+		for(unsigned int j = 0; j < W; j++){
+
+			x_c = (int32_t)i - (int32_t)(H)/2;
+			y_c = (int32_t)j - (int32_t)(W)/2;
+
+			x_prime = (unsigned int)( std::cos(rad)*(x_c) - std::sin(rad)*(y_c)  + (H)/2 );
+			y_prime = (unsigned int)( std::sin(rad)*(x_c) + std::cos(rad)*(y_c) + (W)/2);
+
+			tempImage.imageData[x_prime+displacementX][y_prime+displacementY] = img->imageData[i][j];
+
+		}
+	}
+	
+	double row_lin_interp;
+	double col_lin_interp;
+	double last_lin_interp;
+	
+	//bilinear interpolation
+	//do not use edge lines to avoid segmentation faults
+	for(unsigned int i = 1; i < size_x-1; i++){
+		for(unsigned int j = 1; j < size_y-1; j++){
+
+			if(tempImage.imageData[i][j] == 0) {
+			    row_lin_interp = ( double(tempImage.imageData[i][j-1]) +double(tempImage.imageData[i][j+1]))/2;
+			    col_lin_interp = ( double(tempImage.imageData[i-1][j]) + double(tempImage.imageData[i+1][j]))/2;
+			    last_lin_interp = (row_lin_interp + col_lin_interp)/2;
+			    tempImage.imageData[i][j] = uint8(last_lin_interp);
+			}
+
+		}
+	}
+	
+	return tempImage;
+}
+
+//this function should rotate image and return image object without cropping the rotated image
+//the no cropping part does not work because of the approach itself
+ImageProc::Image ImageProc::img_rotBlnInt(Image* img, float theta){
+
+	printf("Function rotates and shifts center to a larger image, but the no cropping part does not work because of the approach itself. A different method must be used to achieve this. Better not use this function.");
+
+	unsigned int x_prime;
+	unsigned int y_prime;
+	uint8_t clrTopLeft;
+	uint8_t clrBottomLeft;
+	uint8_t clrTopRight;
+	uint8_t clrBottomRight;
+	double fDistance; //distance from pixel to center of image in Cartesian system
+	double fPolarAngle; //angle of the vector of the pixel in Cartesian system
+	int32_t x_c; //horizontal coordonate relative to selected center. IT CAN BE NEGATIVE
+	int32_t y_c; // vertical coordonate relative to selected center. IT CAN BE NEGATIVE
+	double fTrueX;
+	double fTrueY;
+	uint32_t iFloorX;
+	uint32_t iFloorY;
+	uint32_t iCeilingX;
+	uint32_t iCeilingY;
+	double fDeltaX;
+	double fDeltaY;
+	double fTop;
+	double fBottom;
+	uint8_t iPixel;
+
+	uint32_t H = img->getHeight();
+	uint32_t W = img->getWidth();
+
+	double rad = - theta * Image_PI / 180; //convert degrees to rad - the minus is added to rotate clockwise
+	
+	uint16_t size_x;
+	uint16_t size_y;
+	size_x = std::ceil(H*std::abs(std::cos(rad)) + W*std::abs(std::sin(rad)));
+	size_y = std::ceil(H*std::abs(std::sin(rad)) + W*std::abs(std::cos(rad)));
+	
+	ImageProc::Image tempImage(size_x,size_y);
+	
+	//calculate displacement between images
+	uint16_t displacementX;
+	uint16_t displacementY;
+	displacementX = size_x/2 - H/2;
+	displacementY = size_y/2 - W/2;
+
+	for(unsigned int i = 0; i < H; i++){
+		for(unsigned int j = 0; j < W; j++){
+
+			//convert to Cartesian system
+			x_c = j - (W)/2;
+			y_c = (H)/2 - i;
+			
+			//convert Cartesian to Polar
+			fDistance = std::sqrt(x_c * x_c + y_c * y_c);
+        		fPolarAngle = 0.0;   		
+        		if (x_c == 0)
+			{
+			    if (y_c == 0)
+			    {
+				// centre of image, no rotation needed
+				tempImage.imageData[i][j] = img->imageData[i][j];
+				continue;
+			    }
+			    else if (y_c < 0)
+			    {
+				fPolarAngle = 1.5 * Image_PI;// 3/2 * PI
+			    }
+			    else
+			    {
+				fPolarAngle = 0.5 * Image_PI; // 1/2 * PI
+			    }
+			}
+			else
+			{
+			    fPolarAngle = std::atan2((double)y_c, (double)x_c);
+			}		
+			// the crucial rotation part
+			// "reverse" rotate, so minus instead of plus
+			fPolarAngle -= rad;
+
+			// convert polar to Cartesian
+      			fTrueX = fDistance * std::cos(fPolarAngle);
+     			fTrueY = fDistance * std::sin(fPolarAngle);
+
+			// convert Cartesian to raster in new image size
+        		fTrueX = fTrueX + (double)(W)/2;
+        		fTrueY = (double)(H)/2 - fTrueY;
+	
+			iFloorX = (int)(std::floor(fTrueX));
+        		iFloorY = (int)(std::floor(fTrueY));
+        		iCeilingX = (int)(std::ceil(fTrueX));
+        		iCeilingY = (int)(std::ceil(fTrueY));
+        		
+        		// check bounds
+        		if (iFloorX < 0 || iCeilingX < 0 || iFloorX >= W || iCeilingX >= W || iFloorY < 0 || iCeilingY < 0 || iFloorY >= H || iCeilingY >= H) 				continue;
+        		fDeltaX = fTrueX - (double)iFloorX;
+        		fDeltaY = fTrueY - (double)iFloorY;
+
+        		clrTopLeft = img->imageData[iFloorY][iFloorX];
+        		clrTopRight = img->imageData[iFloorY][iCeilingX];
+        		clrBottomLeft = img->imageData[iCeilingY][iFloorX];
+        		clrBottomRight = img->imageData[iCeilingY][iCeilingX];
+        				
+        		// linearly interpolate horizontally between top neighbours
+        		fTop = (1 - fDeltaX) * clrTopLeft + fDeltaX * clrTopRight;
+        		
+        		// linearly interpolate horizontally between bottom neighbours
+        		fBottom = (1 - fDeltaX) * clrBottomLeft + fDeltaX * clrBottomRight;
+        		
+        		// linearly interpolate vertically between top and bottom interpolated results
+        		iPixel = (uint8_t)(std::round((1 - fDeltaY) * fTop + fDeltaY * fBottom));
+        		
+        		// make sure colour values are valid
+        		if (iPixel < 0) iPixel = 0;
+        		if (iPixel > 255) iPixel = 255;	
+        		tempImage.imageData[i+displacementX][j+displacementY] = iPixel;
+
+		}
+	}
+
+	return tempImage;
+}
+
 int ImageProc::impulse_filter(Image* img,int windowSize){
 
 	if((windowSize%2 == 0) || (windowSize < 3)){

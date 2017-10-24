@@ -33,13 +33,13 @@ namespace ImageProc {
 		Image(char const* ,uint8 ); //reads header and data from path file image - personal JPEG decoder
 		Image(char const* ); //reads header and data from path file image
 		~Image(); //deletes image
-		unsigned int getHeight();//Height function
+		unsigned int getHeight() const;//Height function
 		unsigned int setHeight(int ); //set Height param
-		unsigned int getWidth();// Width function
+		unsigned int getWidth() const;// Width function
 		unsigned int setWidth(int ); //set Width param
-		unsigned int getgrayLevel(); //the number of gray levels
+		unsigned int getgrayLevel() const; //the number of gray levels
 		unsigned int setgrayLevel(int); //sets the gray level
-		std::string getType(); //gets the type
+		std::string getType() const; //gets the type
 		unsigned int** imageData; //the stored gray image pixels
 		unsigned int** Red;
 		unsigned int** Green;
@@ -50,6 +50,9 @@ namespace ImageProc {
 
 //		int readPGM(char* ); //reads file into image
 //		int writePGM(char* ); //writes image to file
+
+		//Assignment operator
+    		void operator=(const Image& );
 
 	private:
 		unsigned int Width; //width and height in pixels
@@ -86,7 +89,7 @@ namespace ImageProc {
 
 }
 
-	namespace MachineLearning{
+namespace MachineLearning{
 
 		struct twogauss{
 		double sigma1;
@@ -103,6 +106,6 @@ namespace ImageProc {
 		bool indCompare(twogauss lhs, twogauss rhs);
 
 
-	}
+}
 //end include guard
 #endif

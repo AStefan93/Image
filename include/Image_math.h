@@ -23,7 +23,8 @@ namespace Math {
     void v_HuffmanDecode(uint8* , uint8* );
     
     void v_cumulativeMeans();
-    void v_cumulativeSums();
+    //takes as input normalised histogram and threshold and calculates the cumulative sums on both sides of threshold
+    void v_cumulativeSums1Thresh(double* , uint8_t , double , double );
 
 }
 

@@ -13,7 +13,10 @@ namespace ImageProc {
 	void v_computeNormalizedHistogram(Image* ); //computes the normalized histogram of a grayscale image
 	int equalizeHistogramRemap(Image* ); //already computes histogram
 	int equalizeHistogramCumulative(Image* ); //better than HistogramRemap
-	int rotate(Image* ,float ); //input angle
+	int rotate(Image* ,float ); //input angle - gray images only
+	int rotBlnInt(Image* ,float ); //input angle - with bilinear interpolation - gray images only
+	Image img_rotBlnInt_test(Image* ,float ); //input angle - with bilinear interpolation - gray images only - different function for comparison purposes
+	Image img_rotBlnInt(Image* ,float ); //input angle - with bilinear interpolate - gray images only - returns cropped, larger image - method does not work
 	int computeGrayLevel(Image* );
 
 	int average_filter(Image* ,int ,int ); //image object, windowSize, extra parameter for edge preserving
@@ -37,6 +40,7 @@ namespace ImageProc {
 	void crop(Image* ,Image* ,Square );
 	//segments a gray image into 2 gray levels - black and white
 	void binary_segmentation(Image* );
+	
 }
 
 #endif

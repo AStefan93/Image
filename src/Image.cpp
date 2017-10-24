@@ -12,6 +12,11 @@ ImageProc::Image::Image() {
 	this->Hist = new double[256]; //allocate memory for histogram vector
 	for(int i = 0; i < 256; i++)
 		this->Hist[i] = 0; //initialize vector with zeroes;
+	normHist = new double[256]; //allocate memory for histogram vector
+	for(int i = 0; i < 256; i++) //8 bit depth gray scale image
+		normHist[i] = 0; //initialize vector with zeroes;
+		
+	setgrayLevel(0); // initialize graylevel to 0
 
 	this->Image_count += 1;
 
@@ -31,28 +36,28 @@ ImageProc::Image::Image(char const* imgPath) {
 
 	setHeight(image.height());
 	setWidth(image.width());
-	int Height = getHeight();
-	int Width = getWidth();
+	int imHeight = getHeight();
+	int imWidth = getWidth();
 
 	//allocate memory
-	imageData = new unsigned int*[Height];
-	for (int H = 0; H < Height; H++)
-		imageData[H] = new unsigned int[Width];
+	imageData = new unsigned int*[imHeight];
+	for (int H = 0; H < imHeight; H++)
+		imageData[H] = new unsigned int[imWidth];
 
-	Red = new unsigned int*[Height];
-	for (int i = 0; i < Height; i++)
-		Red[i] = new unsigned int[Width];
+	Red = new unsigned int*[imHeight];
+	for (int i = 0; i < imHeight; i++)
+		Red[i] = new unsigned int[imWidth];
 
-	Green = new unsigned int*[Height];
-	for (int i = 0; i < Height; i++)
-		Green[i] = new unsigned int[Width];
+	Green = new unsigned int*[imHeight];
+	for (int i = 0; i < imHeight; i++)
+		Green[i] = new unsigned int[imWidth];
 
-	Blue = new unsigned int*[Height];
-	for (int i = 0; i < Height; i++)
-		Blue[i] = new unsigned int[Width];
+	Blue = new unsigned int*[imHeight];
+	for (int i = 0; i < imHeight; i++)
+		Blue[i] = new unsigned int[imWidth];
 
-	for (int H = 0; H < Height; H++) {
-		for (int W = 0; W < Width; W++) {
+	for (int H = 0; H < imHeight; H++) {
+		for (int W = 0; W < imWidth; W++) {
 
 			Red[H][W] = image(W,H,0,0);
 			Green[H][W] = image(W,H,0,1);
@@ -88,6 +93,8 @@ ImageProc::Image::Image(char const* imgPath) {
 
 }
 
+
+//JPEG decoder constructor - the uint8 x parameter serves no purpose other than to differentiate between the other constructor - to be modified in the future
 ImageProc::Image::Image(char const* fileName,uint8 x) {
 
 	FILE *fp;
@@ -387,30 +394,102 @@ ImageProc::Image::Image(char const* fileName,uint8 x) {
 
 ImageProc::Image::Image(unsigned int H,unsigned int W) {
 
-	this->grayLevel = 0;
-	this->Height = H;
-	this->Width = W;
+	setHeight(H);
+	setWidth(W);
 	this->imgType = "None";
 
-	this->Hist = new double[256]; //allocate memory for histogram vector
+	Hist = new double[256]; //allocate memory for histogram vector
 	for(int i = 0; i < 256; i++)
-		this->Hist[i] = 0; //initialize vector with zeroes;
+		Hist[i] = 0; //initialize vector with zeroes;
+		
+	normHist = new double[256]; //allocate memory for histogram vector
+	for(int i = 0; i < 256; i++) //8 bit depth gray scale image
+		normHist[i] = 0; //initialize vector with zeroes;
 
 	//allocate memory
-	this->imageData = new unsigned int*[H];
+	imageData = new unsigned int*[H];
 	for (unsigned int i = 0; i < H; i++)
-		this->imageData[i] = new unsigned int[W];
+		imageData[i] = new unsigned int[W];
+	Red = new unsigned int*[H];
+	for (int i = 0; i < H; i++)
+		Red[i] = new unsigned int[W];
 
+	Green = new unsigned int*[H];
+	for (int i = 0; i < H; i++)
+		Green[i] = new unsigned int[W];
+
+	Blue = new unsigned int*[H];
+	for (int i = 0; i < H; i++)
+		Blue[i] = new unsigned int[W];
+		
+	setgrayLevel(0); // initialize graylevel to 0
+
+	//initialise with 0
 	for (unsigned int i = 0; i < H; i++) {
-		for (unsigned int j = 0; j < H; j++) {
-			this->imageData[i][j] = 0;
+		for (unsigned int j = 0; j < W; j++) {
+			imageData[i][j] = 0;
+			Red[i][j] = 0;
+			Green[i][j] = 0;
+			Blue[i][j] = 0;
 		}
 	}
-
-	this->Image_count += 1;
+	
+	Image_count += 1;
 
 }
 
+//assignment operator for Image objects
+void ImageProc::Image::operator=(const ImageProc::Image& img){
+
+	if (this != &img) { // self-assignment check expected
+		uint32_t H = img.getHeight();
+		uint32_t W = img.getWidth();
+		
+		this->Hist = new double[256]; //allocate memory for histogram vector
+
+		this->normHist = new double[256]; //allocate memory for histogram vector
+			
+		//allocate memory
+		this->imageData = new unsigned int*[H];
+		for (unsigned int i = 0; i < H; i++)
+			this->imageData[i] = new unsigned int[W];
+		this->Red = new unsigned int*[H];
+		for (int i = 0; i < H; i++)
+			this->Red[i] = new unsigned int[W];
+
+		this->Green = new unsigned int*[H];
+		for (int i = 0; i < H; i++)
+			this->Green[i] = new unsigned int[W];
+
+		this->Blue = new unsigned int*[H];
+		for (int i = 0; i < H; i++)
+			this->Blue[i] = new unsigned int[W];
+	
+		this->Image_count += 1;
+
+		this->setHeight(H);
+		this->setWidth(W);
+		this->setgrayLevel(img.getgrayLevel());
+		
+		//get values
+		for(unsigned int i = 0; i < H; i++){
+			for(unsigned int j = 0; j < W; j++){
+
+				this->imageData[i][j] = img.imageData[i][j];
+				this->Red[i][j] = img.Red[i][j];
+				this->Green[i][j] = img.Green[i][j];
+				this->Blue[i][j] = img.Blue[i][j];
+		
+			}
+		}
+		
+		for(int i = 0; i < 256; i++){
+			this->Hist[i] = img.Hist[i];
+			this->normHist[i] = img.normHist[i];
+		}	
+	}
+	
+}
 
 //void ImageProc::Image::readPGMHeader(FILE* fp){
 //
@@ -528,7 +607,7 @@ ImageProc::Image::~Image() {
 
 }
 
-unsigned int ImageProc::Image::getHeight() {
+unsigned int ImageProc::Image::getHeight() const{
 	return this->Height;
 }
 
@@ -540,7 +619,7 @@ unsigned int ImageProc::Image::setHeight(int H) {
 }
 
 
-unsigned int ImageProc::Image::getWidth() {
+unsigned int ImageProc::Image::getWidth() const{
 	return this->Width;
 }
 
@@ -551,11 +630,11 @@ unsigned int ImageProc::Image::setWidth(int W) {
 	return 0;
 }
 
-unsigned int ImageProc::Image::getgrayLevel() {
+unsigned int ImageProc::Image::getgrayLevel() const{
 	return this->grayLevel;
 }
 
-std::string ImageProc::Image::getType() {
+std::string ImageProc::Image::getType() const{
 	return this->imgType;
 }
 

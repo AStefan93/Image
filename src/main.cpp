@@ -17,24 +17,22 @@ int main(int argc, char* argv[]) {
 	
 	ImageProc::Image* img = new ImageProc::Image(image_path);
 	ImageProc::Image* img2 = new ImageProc::Image(image_path);
-//	ImageProc::Image* img3 = new ImageProc::Image[1];
+	ImageProc::Image img3;
 	
-	
-	t_2DPoint* uLC = new t_2DPoint[1];
-	t_2DPoint* lRC = new t_2DPoint[1];
+//	t_2DPoint* uLC = new t_2DPoint[1];
+//	t_2DPoint* lRC = new t_2DPoint[1];
 	
 //	imgintf::readImage(img,image_path);
 //	imgintf::readImage(img2,image_path);
 		
-	uLC->x = img->getHeight()/2;
-	uLC->y = 0;
-	lRC->x = img->getHeight();
-	lRC->y = img->getWidth();
-	ImageProc::Square ROI(uLC,lRC);
+//	uLC->x = img->getHeight()/2;
+//	uLC->y = 0;
+//	lRC->x = img->getHeight();
+//	lRC->y = img->getWidth();
+//	ImageProc::Square ROI(uLC,lRC);
 	
 //	ImageProc::Image* img2 = new ImageProc::Image(lRC->x - uLC->x,lRC->y - uLC->y);
 	
-
 //	ImageProc::crop(img,img2,ROI);
 //	ImageProc::sobel(img2);
 
@@ -51,14 +49,26 @@ int main(int argc, char* argv[]) {
 //	ImageProc::bilateral_filterColor(img,21,2);
 //	ImageProc::gaussian_filter(img,5);
 //	ImageProc::unsharp_masking_test(img,img2);
+//	ImageProc::rotate(img,45)
+//	ImageProc::rotBlnInt(img,45);
+//	img3 = img_rotBlnInt_test(img,45);
 
-	ImageProc::equalizeHistogramCumulative(img2);
+	
+//	ImageProc::equalizeHistogramCumulative(img2);
 	
 //	ImageProc::equalizeHistogramRemap(img3);
-//	ImageProc::sobel(img,img2);
+	double cumSum1 = 0;
+	double cumSum2 = 0;
+	ImageProc::sobel(img,img2);
 
 	ImageProc::computeHistogram(img);
 	ImageProc::v_computeNormalizedHistogram(img);
+	ImageProc::computeHistogram(img2);
+	ImageProc::v_computeNormalizedHistogram(img2);
+	Math::v_cumulativeSums1Thresh(img2->normHist,100,cumSum1,cumSum2);
+	printf("%f,%f",cumSum1,cumSum2);
+//	ImageProc::computeHistogram(&img3);
+//	ImageProc::v_computeNormalizedHistogram(&img3);
 //	ImageProc::computeHistogram(img2);
 //	ImageProc::computeHistogram(img3);
 
@@ -66,8 +76,8 @@ int main(int argc, char* argv[]) {
 
 	cimg_library::CImgDisplay init_disp(imgintf::displayImageGray(img));
 	cimg_library::CImgDisplay init2_disp(imgintf::displayHist(img));
-	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(img2));
-	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(img2));
+//	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(&img3));
+//	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(&img3));
 //	cimg_library::CImgDisplay init5_disp(imgintf::displayImageGray(img3));
 //	cimg_library::CImgDisplay init6_disp(imgintf::displayHist(img3));
 	
@@ -79,9 +89,10 @@ int main(int argc, char* argv[]) {
 	while (!init_disp.is_closed() && !init2_disp.is_closed()) {
     		init_disp.wait();
 	}
-	
 
-//	delete uRC;
-//	delete lLC;
+//	delete[] uLC;
+//	delete[] lRC;
+	delete img;
+	delete img2;
 	return 0;
 }

@@ -11,7 +11,7 @@
 
 
 //returns the maximum value of an array
-uint8 uint8_maxValue(uint8* array, uint8 arraySize){
+uint8 Math::uint8_maxValue(uint8* array, uint8 arraySize){
     uint8 max_value = 0;
     
     for(uint8 i = 0; i < arraySize; i++){
@@ -26,7 +26,7 @@ uint8 uint8_maxValue(uint8* array, uint8 arraySize){
 }
 
 //returns the minimum value of an array
-uint8 uint8_minValue(uint8* array, uint8 arraySize){
+uint8 Math::uint8_minValue(uint8* array, uint8 arraySize){
     uint8 min_value = maxof(uint8);
     
     for(uint8 i = 0; i < arraySize; i++){
@@ -42,7 +42,7 @@ uint8 uint8_minValue(uint8* array, uint8 arraySize){
 
 
 //calculate absolute frequency
-uint32* p_uint32_absFreq(uint8* symbol_array, uint32* abs_freq_array, uint8 array_size){
+uint32* Math::p_uint32_absFreq(uint8* symbol_array, uint32* abs_freq_array, uint8 array_size){
     
     //initialise abs_freq array
     for(uint8 i = 0; i < array_size; i++){
@@ -59,7 +59,7 @@ uint32* p_uint32_absFreq(uint8* symbol_array, uint32* abs_freq_array, uint8 arra
 
 //calculate relative frequency
 //the totalNumber should be the length/array_size of the symbol_array in the function p_uint32_absFreq
-uint32* p_uint32_relFreq(uint8* abs_freq_array, uint32* symbolP_array, uint8 symbolP_array_size, uint32 totalNumber){
+uint32* Math::p_uint32_relFreq(uint8* abs_freq_array, uint32* symbolP_array, uint8 symbolP_array_size, uint32 totalNumber){
     
     //initialise abs_freq array
     for(uint8 i = 0; i < symbolP_array_size; i++){
@@ -76,7 +76,7 @@ uint32* p_uint32_relFreq(uint8* abs_freq_array, uint32* symbolP_array, uint8 sym
 //generates the huffman dictionary
 //the 3rd parameter represents the length of the symbol_array
 //the 2nd parameter is the output of the function, the dictionary
-void v_genHuffmanDict(uint8* symbol_array, uint8* huffmanDict, uint8 array_size){
+void Math::v_genHuffmanDict(uint8* symbol_array, uint8* huffmanDict, uint8 array_size){
     
    // p_uint32_absFreq(symbol_array, abs_freq_array, array_size);
     //p_uint32_relFreq(abs_freq_array, symbolP_array, symbolP_array_size, totalNumber);
@@ -91,11 +91,19 @@ void v_genHuffmanDict(uint8* symbol_array, uint8* huffmanDict, uint8 array_size)
     
 }
 
-
-void v_cumulativeSums(){
-
+//function to calculate the cumulative sum of a normalised histogram vector of length 256 divided by 1 threshold
+void Math::v_cumulativeSums1Thresh(double* v,uint8_t k,double& cumSum1, double& cumSum2){
+	
+	cumSum1 = 0;
+	cumSum2 = 0;
+	for(int i = 0; i < k; i ++){
+		cumSum1 += v[i];
+	}
+	cumSum2 = 1 - cumSum1;
+	
 }
-void v_cumulativeMeans(){
+
+void Math::v_cumulativeMeans(){
 
 }
 

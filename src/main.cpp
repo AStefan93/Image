@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
 	ImageProc::v_computeNormalizedHistogram(img2);
 	Math::v_cumulativeSums1Thresh(img2->normHist,100,cumSum1,cumSum2);
 	printf("%f,%f",cumSum1,cumSum2);
+	printf("Test\n");
 //	ImageProc::computeHistogram(&img3);
 //	ImageProc::v_computeNormalizedHistogram(&img3);
 //	ImageProc::computeHistogram(img2);

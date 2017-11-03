@@ -24,7 +24,7 @@ namespace Math {
     
     void v_cumulativeMeans();
     //takes as input normalised histogram and threshold and calculates the cumulative sums on both sides of threshold
-    void v_cumulativeSums1Thresh(double* , uint8_t , double , double );
+    void v_cumulativeSums1Thresh(double* , uint8_t , double& , double& );
 
 }
 

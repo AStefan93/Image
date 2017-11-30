@@ -116,7 +116,7 @@ int ImageProc::equalizeHistogramCumulative(Image* img){
 
 		}
 	}
-
+		
 	unsigned int temp = 0;
 	img->setgrayLevel(temp); // initialize graylevel to 0
 	for(unsigned int i = 0; i < img->getHeight(); i++){
@@ -1717,11 +1717,54 @@ void ImageProc::crop(Image* img, Image* croppedImg, ImageProc::Square cropRegion
 }
 
 //This function should perform a binary segmentation of a gray image - prefferably, the input should be the output of an edge detector algorithm (like sobel)
-//void ImageProc::otsu_binary_segmentation(Image* img){
+void ImageProc::otsu_binary_segmentation(Image* img){
 
-	 
+	double cumSum1, cumSum2, cumMean1, globalMean, variance, varianceB;
+	double niu;
+	double niu_max = 0;
+	double k_optimal;
+	
+	//calculate optimal threshold	
+	for(int k = 0; k < 256; k ++){
+		Math::v_cumulativeSums1Thresh(img->normHist, k, cumSum1, cumSum2); 
+		Math::v_cumMean(img->normHist, k, cumMean1);
+		Math::v_meanIntensity(img->normHist, globalMean);	
+		Math::v_varianceGlobal(img->normHist, globalMean, variance);
+		Math::v_betweenClassVariance(cumSum1, cumSum2, cumMean1, globalMean, varianceB);
+		
+		niu = varianceB/variance;
+		
+		if(niu_max < niu){
+			niu_max = niu;
+			k_optimal = k;
+		}
 
-//}
+	}
+	//printf("cumSum1 = %f\n cumSum2 = %f\n cumMean1 = %f\n globalMean = %f\n variance = %f\n varianceB = %f\n",cumSum1,cumSum2,cumMean1,globalMean,variance,varianceB);
+	//printf("niu_max = %f\n",niu_max);
+	//printf("k_optimal = %f\n",k_optimal);
+		
+
+	//binary segmentation
+	unsigned int Height, Width;
+
+	Height = img->getHeight();
+	Width = img->getWidth();
+
+	for(unsigned int H = 0; H < Height; H++){
+		for(unsigned int W = 0; W < Width; W++){
+			
+			if(img->imageData[H][W] < k_optimal){
+				img->imageData[H][W] = 0;
+			}else{
+				img->imageData[H][W] = 255;
+			}
+
+		}
+	}
+	
+	
+}
 
 //This function should calculate the image bit-depth 
 //uint8 computeGrayLevel(Image* img){

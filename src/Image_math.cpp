@@ -91,19 +91,58 @@ void Math::v_genHuffmanDict(uint8* symbol_array, uint8* huffmanDict, uint8 array
     
 }
 
-//function to calculate the cumulative sum of a normalised histogram vector of length 256 divided by 1 threshold
-void Math::v_cumulativeSums1Thresh(double* v,uint8_t k,double& cumSum1, double& cumSum2){
+//function to calculate the cumulative sum of a normalised histogram vector of length 256 split between two classes by 1 threshold
+//chapter 10.3, eq 10.3-4
+void Math::v_cumulativeSums1Thresh(double* v,uint8_t k,double& P1, double& P2){
 	
-	cumSum1 = 0;
-	cumSum2 = 0;
+	P1 = 0;
+	P2 = 0;
 	for(int i = 0; i < k; i ++){
-		cumSum1 += v[i];
+		P1 += v[i];
 	}
-	cumSum2 = 1 - cumSum1;
+	P2 = 1 - P1;
 	
 }
 
-void Math::v_cumulativeMeans(){
+//v_cumulativeMeans calculates the average intensity of a "class" using an image's normalized histogram split between two classes by 1 threshold
+void Math::v_cumMean(double* v, uint8_t k, double& cumMean_C1){
+
+	cumMean_C1 = 0;
+	for(int i = 0; i < k; i++){
+		cumMean_C1 += i*v[i]; //sum(i*p(i)), where i is the intensity of a pixel and p(i) is it's probability
+	}
 
 }
 
+//v_meanIntensity calculates the global mean of an image
+//eq 10.3-9
+void Math::v_meanIntensity(double* v, double& globalMean){
+
+	globalMean = 0;
+	for(int i = 0; i < 256; i++){
+		globalMean += i*v[i]; //the global intensity mean of the image
+	}
+
+}
+
+//v_variance calculates the intensity variance of all the pixels in the image
+//chapter 10.3, equation 10.3-13 in Digital Image Processing Third Edition
+void Math::v_varianceGlobal(double* v, double globalMean, double& variance){
+	
+	variance = 0;
+	
+	for(int i = 0; i < 256; i++){
+		variance += (i - globalMean)*(i - globalMean) * v[i];
+	}
+	
+}
+
+//function calculates the between class variance
+//chapter 10.3 equation 10.3-15 in Digital Image Processing Third Edition
+void Math::v_betweenClassVariance(double P1, double P2, double cumMean_C1, double globalMean, double& varianceB){
+
+	varianceB = 0;
+	if((P1 != 0) && (P2 != 0)){//avoid division by zero
+		varianceB = ((globalMean*P1 - cumMean_C1)*(globalMean*P1 - cumMean_C1))/(P1*P2);
+	}
+}

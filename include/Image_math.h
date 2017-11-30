@@ -22,10 +22,14 @@ namespace Math {
     //decode 1D symbol vector with huffman dictionary
     void v_HuffmanDecode(uint8* , uint8* );
     
-    void v_cumulativeMeans();
+	void v_cumMean(double* , uint8_t , double& );
+	void v_meanIntensity(double* , double& );
+
     //takes as input normalised histogram and threshold and calculates the cumulative sums on both sides of threshold
     void v_cumulativeSums1Thresh(double* , uint8_t , double& , double& );
-
+	
+	void v_varianceGlobal(double* , double , double& );
+	void v_betweenClassVariance(double , double , double , double , double& );
 }
 
 //end include guard

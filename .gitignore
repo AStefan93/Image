@@ -1,3 +1,13 @@
 build/obj/*
 image
+image.exe
+image.*
 test/*
+include/*.swp
+include/*.swo
+include/*.swn
+include/*.swm
+src/*.swp
+src/*.swo
+src/*.swn
+src/*.swm

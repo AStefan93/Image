@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	
 	ImageProc::Image* img = new ImageProc::Image(image_path);
 	ImageProc::Image* img2 = new ImageProc::Image(image_path);
-	ImageProc::Image img3;
+	ImageProc::Image* img3 = new ImageProc::Image(image_path);
 	
 //	t_2DPoint* uLC = new t_2DPoint[1];
 //	t_2DPoint* lRC = new t_2DPoint[1];
@@ -33,9 +33,13 @@ int main(int argc, char* argv[]) {
 	
 //	ImageProc::Image* img2 = new ImageProc::Image(lRC->x - uLC->x,lRC->y - uLC->y);
 	
-//	ImageProc::crop(img,img2,ROI);
-//	ImageProc::sobel(img2);
+//	ImageProc::gaussian_filter(img3,3);
 
+//	ImageProc::crop(img,img2,ROI);
+	ImageProc::sobel(img2);
+	ImageProc::sobel(img3);
+
+//	ImageProc::bilateral_filterGray(img3,21);
 //	imgintf::saveImageGray(img2,image_path2);
 //	imgintf::readImage(img2,image_path);
 //	imgintf::readImage(img3,image_path);
@@ -57,17 +61,18 @@ int main(int argc, char* argv[]) {
 //	ImageProc::equalizeHistogramCumulative(img2);
 	
 //	ImageProc::equalizeHistogramRemap(img3);
-	double cumSum1 = 0;
-	double cumSum2 = 0;
-	ImageProc::sobel(img,img2);
+	
+//	ImageProc::sobel(img,img2);
 
 	ImageProc::computeHistogram(img);
-	ImageProc::v_computeNormalizedHistogram(img);
 	ImageProc::computeHistogram(img2);
-	ImageProc::v_computeNormalizedHistogram(img2);
-	Math::v_cumulativeSums1Thresh(img2->normHist,100,cumSum1,cumSum2);
-	printf("%f,%f",cumSum1,cumSum2);
-	printf("Test\n");
+
+
+	ImageProc::v_computeNormalizedHistogram(img3);
+	ImageProc::otsu_binary_segmentation(img3);
+	ImageProc::computeHistogram(img3);
+//	ImageProc::v_computeNormalizedHistogram(img2);
+//
 //	ImageProc::computeHistogram(&img3);
 //	ImageProc::v_computeNormalizedHistogram(&img3);
 //	ImageProc::computeHistogram(img2);
@@ -77,10 +82,10 @@ int main(int argc, char* argv[]) {
 
 	cimg_library::CImgDisplay init_disp(imgintf::displayImageGray(img));
 	cimg_library::CImgDisplay init2_disp(imgintf::displayHist(img));
-//	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(&img3));
-//	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(&img3));
-//	cimg_library::CImgDisplay init5_disp(imgintf::displayImageGray(img3));
-//	cimg_library::CImgDisplay init6_disp(imgintf::displayHist(img3));
+	cimg_library::CImgDisplay init3_disp(imgintf::displayImageGray(img2));
+	cimg_library::CImgDisplay init4_disp(imgintf::displayHist(img2));
+	cimg_library::CImgDisplay init5_disp(imgintf::displayImageGray(img3));
+	cimg_library::CImgDisplay init6_disp(imgintf::displayHist(img3));
 	
 	
 	duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
@@ -95,5 +100,6 @@ int main(int argc, char* argv[]) {
 //	delete[] lRC;
 	delete img;
 	delete img2;
+	delete img3;
 	return 0;
 }

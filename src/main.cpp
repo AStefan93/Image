@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
 	
 //	ImageProc::Image* img2 = new ImageProc::Image(lRC->x - uLC->x,lRC->y - uLC->y);
 	
-//	ImageProc::gaussian_filter(img3,3);
+	ImageProc::gaussian_filter(img3,3);
 
 //	ImageProc::crop(img,img2,ROI);
 	ImageProc::sobel(img2);

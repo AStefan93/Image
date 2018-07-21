@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cd build
+if [ ! -d "obj" ]; then
+	mkdir obj;
+fi
 make clean
 make
 cd ..
